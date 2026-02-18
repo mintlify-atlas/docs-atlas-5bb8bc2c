@@ -1,0 +1,91 @@
+{
+  "projectType": "general",
+  "projectName": "Mintlify Starter Kit",
+  "projectDescription": "A starter template for creating beautiful documentation sites with Mintlify",
+  "theme": "mint",
+  "primaryColor": "#16A34A",
+  "lightColor": "#07C983",
+  "darkColor": "#15803D",
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "Guides",
+        "groups": [
+          {
+            "group": "Getting started",
+            "pages": [
+              "index",
+              "quickstart",
+              "development"
+            ]
+          },
+          {
+            "group": "Customization",
+            "pages": [
+              "essentials/settings",
+              "essentials/navigation"
+            ]
+          },
+          {
+            "group": "Writing content",
+            "pages": [
+              "essentials/markdown",
+              "essentials/code",
+              "essentials/images",
+              "essentials/reusable-snippets"
+            ]
+          },
+          {
+            "group": "AI tools",
+            "pages": [
+              "ai-tools/cursor",
+              "ai-tools/claude-code",
+              "ai-tools/windsurf"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "API reference",
+        "groups": [
+          {
+            "group": "API documentation",
+            "pages": [
+              "api-reference/introduction"
+            ]
+          },
+          {
+            "group": "Endpoint examples",
+            "pages": [
+              "api-reference/endpoint/get",
+              "api-reference/endpoint/create",
+              "api-reference/endpoint/delete",
+              "api-reference/endpoint/webhook"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "keyFeatures": [
+    "Complete documentation template with examples",
+    "MDX-based content with rich components",
+    "API reference examples with OpenAPI support",
+    "Local development with live preview",
+    "AI-assisted writing tools integration",
+    "Customizable themes and branding"
+  ],
+  "publicApiSurface": [
+    "Introduction page",
+    "Quickstart guide",
+    "Development setup",
+    "Settings customization",
+    "Navigation configuration",
+    "Markdown/MDX writing",
+    "Code block examples",
+    "Image handling",
+    "Reusable snippets",
+    "API reference examples",
+    "AI tools integration (Cursor, Claude Code, Windsurf)"
+  ]
+}
