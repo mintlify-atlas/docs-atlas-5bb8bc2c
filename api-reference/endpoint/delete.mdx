@@ -1,119 +1,82 @@
 ---
 title: 'Delete Plant'
+description: 'Remove a plant from the Plant Store by ID'
 openapi: 'DELETE /plants/{id}'
 ---
 
-Delete a single plant from the store based on the ID supplied. This operation permanently removes the plant from the inventory.
+## Overview
 
-## Endpoint
-
-```
-DELETE /plants/{id}
-```
-
-## Authentication
-
-This endpoint requires Bearer token authentication. Include your token in the Authorization header:
-
-```bash
-curl -X DELETE "http://sandbox.mintlify.com/plants/42" \
-  -H "Authorization: Bearer YOUR_API_TOKEN"
-```
-
-## Path Parameters
-
-<ParamField path="id" type="integer" format="int64" required>
-  The unique identification number of the plant to delete.
-  
-  <Expandable title="Requirements">
-    - Required parameter
-    - Must be a valid integer (int64 format)
-    - Must correspond to an existing plant ID
-    - Cannot be null or empty
-  </Expandable>
-</ParamField>
+The `DELETE /plants/{id}` endpoint removes a single plant from the store based on the ID supplied. This operation is permanent and cannot be undone.
 
 <Warning>
-  This operation is permanent and cannot be undone. Ensure you have the correct plant ID before deletion.
+This is a destructive operation. Once a plant is deleted, it cannot be recovered. Always confirm the plant ID before deletion.
 </Warning>
+
+## Request
+
+### Path Parameters
+
+<ParamField path="id" type="integer" required>
+  The unique identifier of the plant to delete. This ID is returned when creating a plant or can be retrieved from the GET /plants endpoint.
+  
+  **Example:** `42`
+</ParamField>
+
+### Headers
+
+<ParamField header="Authorization" type="string" required>
+  Bearer token for authentication. Format: `Bearer YOUR_ACCESS_TOKEN`
+</ParamField>
 
 ## Response
 
-This endpoint returns no content on successful deletion.
+### Success Response (204 No Content)
 
-<ResponseField name="204" type="No Content">
-  Plant deleted successfully. No response body is returned.
+A successful deletion returns a `204 No Content` status with an empty response body. This indicates the plant was successfully removed from the store.
+
+### Error Responses
+
+<ResponseField name="error" type="integer">
+  Error code indicating the type of error
 </ResponseField>
 
-## Status Codes
-
-<ResponseField name="204" type="Success">
-  Plant deleted successfully with no content returned
+<ResponseField name="message" type="string">
+  Human-readable error message describing what went wrong
 </ResponseField>
 
-<ResponseField name="400" type="Error">
-  Unexpected error occurred during deletion
-  
-  <Expandable title="Error Response">
-    ```json
-    {
-      "error": 400,
-      "message": "Error description"
-    }
-    ```
-    
-    Common error scenarios:
-    - Invalid plant ID format
-    - Plant ID does not exist
-    - User lacks permission to delete this plant
-  </Expandable>
-</ResponseField>
-
-<ResponseField name="404" type="Not Found">
-  Plant with the specified ID was not found
-  
-  ```json
-  {
-    "error": 404,
-    "message": "Plant not found"
-  }
-  ```
-</ResponseField>
-
-## Example Request
+## Examples
 
 <CodeGroup>
 
 ```bash cURL
 curl -X DELETE "http://sandbox.mintlify.com/plants/42" \
-  -H "Authorization: Bearer YOUR_API_TOKEN" \
-  -H "Content-Type: application/json"
+  -H "Authorization: Bearer YOUR_ACCESS_TOKEN"
 ```
 
 ```javascript JavaScript
-const response = await fetch('http://sandbox.mintlify.com/plants/42', {
+const plantId = 42;
+
+const response = await fetch(`http://sandbox.mintlify.com/plants/${plantId}`, {
   method: 'DELETE',
   headers: {
-    'Authorization': 'Bearer YOUR_API_TOKEN',
-    'Content-Type': 'application/json'
+    'Authorization': 'Bearer YOUR_ACCESS_TOKEN'
   }
 });
 
 if (response.status === 204) {
   console.log('Plant deleted successfully');
 } else {
-  const error = await response.json();
-  console.error('Deletion failed:', error);
+  console.error('Failed to delete plant');
 }
 ```
 
 ```python Python
 import requests
 
-url = "http://sandbox.mintlify.com/plants/42"
+plant_id = 42
+url = f"http://sandbox.mintlify.com/plants/{plant_id}"
 headers = {
-    "Authorization": "Bearer YOUR_API_TOKEN",
-    "Content-Type": "application/json"
+    "Authorization": "Bearer YOUR_ACCESS_TOKEN"
 }
 
 response = requests.delete(url, headers=headers)
@@ -121,91 +84,316 @@ response = requests.delete(url, headers=headers)
 if response.status_code == 204:
     print("Plant deleted successfully")
 else:
-    error = response.json()
-    print(f"Deletion failed: {error}")
+    print(f"Error: {response.json()}")
+```
+
+```go Go
+package main
+
+import (
+    "fmt"
+    "net/http"
+)
+
+func main() {
+    plantID := 42
+    url := fmt.Sprintf("http://sandbox.mintlify.com/plants/%d", plantID)
+    
+    req, _ := http.NewRequest("DELETE", url, nil)
+    req.Header.Add("Authorization", "Bearer YOUR_ACCESS_TOKEN")
+    
+    client := &http.Client{}
+    resp, err := client.Do(req)
+    if err != nil {
+        panic(err)
+    }
+    defer resp.Body.Close()
+    
+    if resp.StatusCode == 204 {
+        fmt.Println("Plant deleted successfully")
+    } else {
+        fmt.Printf("Error: %d\n", resp.StatusCode)
+    }
+}
 ```
 
 ```ruby Ruby
 require 'net/http'
-require 'json'
 
-uri = URI('http://sandbox.mintlify.com/plants/42')
-request = Net::HTTP::Delete.new(uri)
-request['Authorization'] = 'Bearer YOUR_API_TOKEN'
-request['Content-Type'] = 'application/json'
+plant_id = 42
+uri = URI("http://sandbox.mintlify.com/plants/#{plant_id}")
 
-response = Net::HTTP.start(uri.hostname, uri.port) do |http|
-  http.request(request)
-end
+http = Net::HTTP.new(uri.host, uri.port)
+request = Net::HTTP::Delete.new(uri.path)
+request['Authorization'] = 'Bearer YOUR_ACCESS_TOKEN'
+
+response = http.request(request)
 
 if response.code == '204'
-  puts 'Plant deleted successfully'
+  puts "Plant deleted successfully"
 else
-  error = JSON.parse(response.body)
-  puts "Deletion failed: #{error}"
+  puts "Error: #{response.body}"
 end
 ```
 
 </CodeGroup>
 
-## Example Response
+### Success Response
 
-```text 204 Success
-(No content returned)
+```text 204 No Content
+(Empty response body)
 ```
 
-```json 400 Error
-{
-  "error": 400,
-  "message": "Invalid plant ID format. ID must be a valid integer."
-}
-```
+### Error Responses
 
-```json 404 Not Found
-{
-  "error": 404,
-  "message": "Plant with ID 42 not found in the system."
+<Tabs>
+  <Tab title="Not Found">
+    ```json 404 Not Found
+    {
+      "error": 404,
+      "message": "Plant with ID 42 not found"
+    }
+    ```
+  </Tab>
+  
+  <Tab title="Unauthorized">
+    ```json 401 Unauthorized
+    {
+      "error": 401,
+      "message": "Invalid or missing authentication token"
+    }
+    ```
+  </Tab>
+  
+  <Tab title="Forbidden">
+    ```json 403 Forbidden
+    {
+      "error": 403,
+      "message": "Insufficient permissions to delete this plant"
+    }
+    ```
+  </Tab>
+</Tabs>
+
+## Use Cases
+
+<CardGroup cols={2}>
+  <Card title="Inventory Management" icon="boxes-stacked">
+    Remove discontinued or out-of-stock plants from your catalog
+  </Card>
+  
+  <Card title="Data Cleanup" icon="broom">
+    Delete duplicate or invalid plant entries to maintain data quality
+  </Card>
+  
+  <Card title="User Actions" icon="user">
+    Allow users to remove plants from their personal collections or wishlists
+  </Card>
+  
+  <Card title="Administrative Tasks" icon="user-shield">
+    Enable admins to moderate and remove inappropriate plant submissions
+  </Card>
+</CardGroup>
+
+## Best Practices
+
+<AccordionGroup>
+  <Accordion title="Verify plant exists before deletion">
+    Always check if a plant exists before attempting to delete it to provide better user feedback.
+    
+    ```javascript
+    async function deletePlantSafely(plantId) {
+      // First, verify the plant exists
+      const getResponse = await fetch(
+        'http://sandbox.mintlify.com/plants',
+        {
+          headers: { 'Authorization': `Bearer ${token}` }
+        }
+      );
+      
+      const plants = await getResponse.json();
+      const plant = plants.find(p => p.id === plantId);
+      
+      if (!plant) {
+        throw new Error(`Plant with ID ${plantId} does not exist`);
+      }
+      
+      // Proceed with deletion
+      const deleteResponse = await fetch(
+        `http://sandbox.mintlify.com/plants/${plantId}`,
+        {
+          method: 'DELETE',
+          headers: { 'Authorization': `Bearer ${token}` }
+        }
+      );
+      
+      return deleteResponse.status === 204;
+    }
+    ```
+  </Accordion>
+  
+  <Accordion title="Implement confirmation prompts">
+    Always ask users to confirm deletion actions to prevent accidental data loss.
+    
+    ```javascript
+    async function deleteWithConfirmation(plantId, plantName) {
+      const confirmed = window.confirm(
+        `Are you sure you want to delete "${plantName}"? This action cannot be undone.`
+      );
+      
+      if (!confirmed) {
+        return false;
+      }
+      
+      try {
+        const response = await fetch(
+          `http://sandbox.mintlify.com/plants/${plantId}`,
+          {
+            method: 'DELETE',
+            headers: { 'Authorization': `Bearer ${token}` }
+          }
+        );
+        
+        if (response.status === 204) {
+          console.log(`Successfully deleted ${plantName}`);
+          return true;
+        }
+      } catch (error) {
+        console.error('Deletion failed:', error);
+        return false;
+      }
+    }
+    ```
+  </Accordion>
+  
+  <Accordion title="Handle errors gracefully">
+    Implement proper error handling for common scenarios like network failures and authentication issues.
+    
+    ```javascript
+    async function deletePlant(plantId) {
+      try {
+        const response = await fetch(
+          `http://sandbox.mintlify.com/plants/${plantId}`,
+          {
+            method: 'DELETE',
+            headers: { 'Authorization': `Bearer ${token}` }
+          }
+        );
+        
+        if (response.status === 204) {
+          return { success: true };
+        }
+        
+        if (response.status === 404) {
+          return { 
+            success: false, 
+            error: 'Plant not found. It may have already been deleted.' 
+          };
+        }
+        
+        if (response.status === 403) {
+          return { 
+            success: false, 
+            error: 'You do not have permission to delete this plant.' 
+          };
+        }
+        
+        const errorData = await response.json();
+        return { 
+          success: false, 
+          error: errorData.message || 'Unknown error occurred' 
+        };
+      } catch (error) {
+        return { 
+          success: false, 
+          error: 'Network error. Please check your connection.' 
+        };
+      }
+    }
+    ```
+  </Accordion>
+  
+  <Accordion title="Consider soft deletes for critical data">
+    For important data, consider implementing soft deletes (marking as deleted) rather than permanent deletion.
+    
+    ```javascript
+    // Alternative: Implement soft delete using an update endpoint
+    async function softDeletePlant(plantId) {
+      // If your API supports it, mark as deleted instead of removing
+      const response = await fetch(
+        `http://sandbox.mintlify.com/plants/${plantId}`,
+        {
+          method: 'PATCH',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            deleted: true,
+            deletedAt: new Date().toISOString()
+          })
+        }
+      );
+      
+      return response.ok;
+    }
+    ```
+  </Accordion>
+</AccordionGroup>
+
+## Bulk Deletion
+
+For deleting multiple plants, implement proper batching and error handling:
+
+```javascript
+async function bulkDeletePlants(plantIds) {
+  const results = {
+    successful: [],
+    failed: []
+  };
+  
+  for (const id of plantIds) {
+    try {
+      const response = await fetch(
+        `http://sandbox.mintlify.com/plants/${id}`,
+        {
+          method: 'DELETE',
+          headers: { 'Authorization': `Bearer ${token}` }
+        }
+      );
+      
+      if (response.status === 204) {
+        results.successful.push(id);
+      } else {
+        results.failed.push({ id, reason: 'Deletion failed' });
+      }
+    } catch (error) {
+      results.failed.push({ id, reason: error.message });
+    }
+    
+    // Small delay to respect rate limits
+    await new Promise(resolve => setTimeout(resolve, 100));
+  }
+  
+  console.log(`Deleted ${results.successful.length} plants`);
+  console.log(`Failed to delete ${results.failed.length} plants`);
+  
+  return results;
 }
 ```
 
 <Note>
-  A successful deletion returns HTTP status code 204 (No Content) with an empty response body. Always check the status code rather than expecting response data.
+The DELETE endpoint returns an empty response body with a 204 status code. Make sure your code handles this correctly and doesn't expect JSON data in the response.
 </Note>
 
-<Tip>
-  Before deleting a plant, consider using the [Get Plants endpoint](/api-reference/endpoint/get) to verify the plant exists and retrieve its details for confirmation.
-</Tip>
+## Related Endpoints
 
-## Best Practices
-
-### Confirmation Flow
-
-Implement a two-step confirmation process in your application:
-
-1. Fetch the plant details using the GET endpoint
-2. Display the details to the user for confirmation
-3. Execute the DELETE request only after user confirmation
-
-### Error Handling
-
-Always handle both success and error cases:
-
-```javascript
-try {
-  const response = await deletePlant(plantId);
-  if (response.status === 204) {
-    // Update UI to reflect deletion
-    showSuccess('Plant removed from inventory');
-  }
-} catch (error) {
-  if (error.status === 404) {
-    showError('Plant not found');
-  } else {
-    showError('Failed to delete plant');
-  }
-}
-```
-
-### Audit Trail
-
-For production systems, consider implementing an audit log to track deletions for compliance and debugging purposes.
+<CardGroup cols={2}>
+  <Card title="Get Plants" icon="list" href="/api-reference/endpoint/get">
+    Retrieve all plants to find the ID
+  </Card>
+  
+  <Card title="Create Plant" icon="plus" href="/api-reference/endpoint/create">
+    Add a new plant to the store
+  </Card>
+</CardGroup>

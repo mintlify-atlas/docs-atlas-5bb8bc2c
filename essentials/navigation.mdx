@@ -1,17 +1,21 @@
 ---
-title: 'Navigation'
-description: 'Configure your documentation navigation structure with tabs, groups, and pages in docs.json'
+title: 'Navigation Structure'
+description: 'Organize your documentation with tabs, groups, and pages using the navigation configuration'
 ---
 
-The navigation field in `docs.json` defines the pages that appear in your documentation's navigation menu. You'll update this configuration every time you add a new page.
+The navigation structure is defined in your `docs.json` file and controls how pages appear in your documentation sidebar. Every time you add a new page, you'll need to update the navigation configuration—pages don't appear automatically.
 
-<Warning>Pages do not show up automatically. You must add them to `docs.json` to make them visible in the navigation.</Warning>
+<Note>
+The navigation menu appears on every page of your documentation site. A well-organized navigation structure helps users find information quickly and understand your documentation hierarchy.
+</Note>
 
-## Navigation Structure
+## Navigation Syntax
 
-Mintlify's navigation uses a hierarchical structure with tabs, groups, and pages.
+Mintlify uses a recursive navigation syntax that supports nested groups and hierarchical organization. The basic structure includes tabs, groups, and pages.
 
-```json
+### Basic Structure
+
+```json docs.json
 {
   "navigation": {
     "tabs": [
@@ -20,7 +24,11 @@ Mintlify's navigation uses a hierarchical structure with tabs, groups, and pages
         "groups": [
           {
             "group": "Getting started",
-            "pages": ["index", "quickstart", "development"]
+            "pages": [
+              "index",
+              "quickstart",
+              "development"
+            ]
           }
         ]
       }
@@ -30,25 +38,39 @@ Mintlify's navigation uses a hierarchical structure with tabs, groups, and pages
 ```
 
 **Hierarchy:**
-- **Tabs** - Top-level navigation sections
-- **Groups** - Categories within each tab
-- **Pages** - Individual documentation pages (without `.mdx` extension)
+1. **Tabs** - Top-level navigation sections
+2. **Groups** - Categories within each tab
+3. **Pages** - Individual documentation pages (MDX files)
 
-## Basic Navigation
+<Tip>
+You don't need to include the `.mdx` extension in page names. Mintlify automatically resolves the file paths.
+</Tip>
 
-Start with a simple navigation structure organized into groups.
+## Tabs
 
-<CodeGroup>
-```json Single group
+Tabs create separate sections in your documentation, ideal for organizing different types of content like guides, API reference, and tutorials.
+
+### Multiple Tabs Example
+
+```json docs.json
 {
   "navigation": {
     "tabs": [
       {
-        "tab": "Docs",
+        "tab": "Guides",
         "groups": [
           {
-            "group": "Getting Started",
-            "pages": ["quickstart"]
+            "group": "Getting started",
+            "pages": ["index", "quickstart"]
+          }
+        ]
+      },
+      {
+        "tab": "API reference",
+        "groups": [
+          {
+            "group": "API documentation",
+            "pages": ["api-reference/introduction"]
           }
         ]
       }
@@ -57,7 +79,15 @@ Start with a simple navigation structure organized into groups.
 }
 ```
 
-```json Multiple groups
+Each tab appears in the top navigation bar, allowing users to switch between major sections of your documentation.
+
+## Groups
+
+Groups organize related pages within a tab. They appear as collapsible sections in the sidebar with a heading.
+
+### Multiple Groups in a Tab
+
+```json docs.json
 {
   "navigation": {
     "tabs": [
@@ -71,6 +101,14 @@ Start with a simple navigation structure organized into groups.
           {
             "group": "Customization",
             "pages": ["essentials/settings", "essentials/navigation"]
+          },
+          {
+            "group": "Writing content",
+            "pages": [
+              "essentials/markdown",
+              "essentials/code",
+              "essentials/images"
+            ]
           }
         ]
       }
@@ -78,15 +116,90 @@ Start with a simple navigation structure organized into groups.
   }
 }
 ```
+
+Groups help users scan your documentation and find related content quickly.
+
+## Pages
+
+Pages are individual MDX files in your documentation. Reference them using their file path relative to your documentation root.
+
+### Page Path Examples
+
+<CodeGroup>
+```json Root Level Pages
+{
+  "pages": ["index", "quickstart"]
+}
+```
+
+```json Pages in Folders
+{
+  "pages": [
+    "essentials/settings",
+    "essentials/navigation",
+    "api-reference/introduction"
+  ]
+}
+```
 </CodeGroup>
 
-<Note>You don't need to include `.mdx` in page names. Just use the filename without the extension.</Note>
+## Folders and File Organization
+
+Organize your MDX files in folders to create clean URL structures. The folder structure directly maps to your URL paths.
+
+### Folder Structure Example
+
+```
+docs/
+├── index.mdx
+├── quickstart.mdx
+├── essentials/
+│   ├── settings.mdx
+│   ├── navigation.mdx
+│   └── markdown.mdx
+└── api-reference/
+    ├── introduction.mdx
+    └── endpoint/
+        ├── get.mdx
+        └── create.mdx
+```
+
+This structure creates the following URLs:
+- `https://yoursite.com/` (index.mdx)
+- `https://yoursite.com/quickstart` (quickstart.mdx)
+- `https://yoursite.com/essentials/settings` (essentials/settings.mdx)
+- `https://yoursite.com/api-reference/endpoint/get` (api-reference/endpoint/get.mdx)
+
+<Warning>
+You cannot use `api` as a top-level folder name due to Next.js internal routing. Use `api-reference` or nest it inside another folder instead.
+</Warning>
 
 ## Nested Navigation
 
-Mintlify's navigation syntax is recursive, allowing you to create nested groups within your page structure.
+Mintlify supports nested groups within pages for creating hierarchical navigation structures:
 
-```json
+<Tabs>
+  <Tab title="Regular Navigation">
+```json docs.json
+{
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "Docs",
+        "groups": [
+          {
+            "group": "Getting Started",
+            "pages": ["quickstart", "development"]
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+  </Tab>
+  <Tab title="Nested Navigation">
+```json docs.json
 {
   "navigation": {
     "tabs": [
@@ -98,7 +211,7 @@ Mintlify's navigation syntax is recursive, allowing you to create nested groups 
             "pages": [
               "quickstart",
               {
-                "group": "Advanced Topics",
+                "group": "Advanced Setup",
                 "pages": [
                   "advanced/configuration",
                   "advanced/deployment"
@@ -112,125 +225,26 @@ Mintlify's navigation syntax is recursive, allowing you to create nested groups 
   }
 }
 ```
+  </Tab>
+</Tabs>
 
-<Tip>Use nested navigation to organize related pages under subcategories without cluttering your main navigation.</Tip>
+Nested groups appear as expandable sections within the parent group, allowing for deeper content hierarchies.
 
-## Multiple Tabs
+## Global Navigation
 
-Separate different sections of your documentation into tabs for better organization.
+### Global Anchors
 
-```json
+Add persistent quick links that appear across all tabs using global anchors:
+
+```json docs.json
 {
   "navigation": {
     "tabs": [
       {
         "tab": "Guides",
-        "groups": [
-          {
-            "group": "Getting started",
-            "pages": ["index", "quickstart", "development"]
-          },
-          {
-            "group": "Customization",
-            "pages": ["essentials/settings", "essentials/navigation"]
-          }
-        ]
-      },
-      {
-        "tab": "API reference",
-        "groups": [
-          {
-            "group": "API documentation",
-            "pages": ["api-reference/introduction"]
-          },
-          {
-            "group": "Endpoint examples",
-            "pages": [
-              "api-reference/endpoint/get",
-              "api-reference/endpoint/create",
-              "api-reference/endpoint/delete"
-            ]
-          }
-        ]
+        "groups": [...]
       }
-    ]
-  }
-}
-```
-
-## Organizing with Folders
-
-Use folders to organize your MDX files and keep your documentation structure clean.
-
-<AccordionGroup>
-  <Accordion title="Creating folders" icon="folder">
-    Simply create folders in your project and place MDX files inside them. Then update the paths in `docs.json` to match your folder structure.
-
-    **Example:** To create a page at `https://yoursite.com/your-folder/your-page`:
-    1. Create a folder called `your-folder`
-    2. Add an MDX file called `your-page.mdx` inside it
-    3. Reference it in navigation as `your-folder/your-page`
-  </Accordion>
-
-  <Accordion title="Folder structure example" icon="diagram-project">
-    ```
-    docs/
-    ├── index.mdx
-    ├── quickstart.mdx
-    ├── essentials/
-    │   ├── settings.mdx
-    │   └── navigation.mdx
-    └── api-reference/
-        ├── introduction.mdx
-        └── endpoint/
-            ├── get.mdx
-            └── create.mdx
-    ```
-
-    ```json
-    {
-      "navigation": {
-        "tabs": [
-          {
-            "tab": "Docs",
-            "groups": [
-              {
-                "group": "Getting Started",
-                "pages": ["index", "quickstart"]
-              },
-              {
-                "group": "Customization",
-                "pages": [
-                  "essentials/settings",
-                  "essentials/navigation"
-                ]
-              }
-            ]
-          }
-        ]
-      }
-    }
-    ```
-  </Accordion>
-
-  <Accordion title="Reserved folder names" icon="triangle-exclamation">
-    <Warning>
-    You cannot use `api` as a top-level folder name. Mintlify uses Next.js, which reserves this folder for internal server calls.
-    </Warning>
-
-    **Solutions:**
-    - Use `api-reference` instead of `api`
-    - Nest the `api` folder inside another folder: `docs/api/...`
-  </Accordion>
-</AccordionGroup>
-
-## Global Anchors
-
-Add external links to your navigation sidebar with custom icons and colors.
-
-```json
-{
-  "navigation": {
+    ],
     "global": {
       "anchors": [
         {
@@ -249,129 +263,59 @@ Add external links to your navigation sidebar with custom icons and colors.
 }
 ```
 
-### Anchor Properties
+**Anchor Properties:**
+- `anchor` - Display name for the link
+- `href` - URL (internal or external)
+- `icon` - Font Awesome icon name
+- `color` - Optional hex color for the icon background
 
-<AccordionGroup>
-  <Accordion title="Icon customization">
-    Use [Font Awesome](https://fontawesome.com/search) icons to style your anchors.
+Global anchors appear below the main navigation in the sidebar and remain visible regardless of the selected tab.
 
-    ```json
-    {
-      "anchor": "Community",
-      "icon": "comments",
-      "iconType": "duotone"
-    }
-    ```
+### Top Anchor Customization
 
-    **Icon types:** `brands`, `duotone`, `light`, `sharp-solid`, `solid`, `thin`
-  </Accordion>
+Customize the topmost anchor that typically says "Documentation":
 
-  <Accordion title="Color customization">
-    Set custom colors for anchor icon backgrounds using hex codes.
+```json docs.json
+{
+  "topAnchor": {
+    "name": "Guides",
+    "icon": "book",
+    "iconType": "solid"
+  }
+}
+```
 
-    ```json
-    {
-      "anchor": "API Reference",
-      "icon": "code",
-      "color": "#16A34A"
-    }
-    ```
-
-    You can also create gradients:
-
-    ```json
-    {
-      "anchor": "Community",
-      "icon": "comments",
-      "color": {
-        "from": "#16A34A",
-        "to": "#07C983"
-      }
-    }
-    ```
-  </Accordion>
-
-  <Accordion title="Version-specific anchors">
-    Show or hide anchors based on the selected documentation version.
-
-    ```json
-    {
-      "versions": ["v2.0", "v1.0"],
-      "navigation": {
-        "global": {
-          "anchors": [
-            {
-              "anchor": "V2 API",
-              "href": "/api/v2",
-              "version": "v2.0"
-            }
-          ]
-        }
-      }
-    }
-    ```
-  </Accordion>
-
-  <Accordion title="Hidden anchors">
-    Create anchors that only appear when users directly link to them.
-
-    ```json
-    {
-      "anchor": "Internal Tools",
-      "href": "/internal",
-      "isDefaultHidden": true
-    }
-    ```
-  </Accordion>
-</AccordionGroup>
+This overrides the default "Documentation" label with your custom text and icon.
 
 ## Hidden Pages
 
-MDX files not included in `docs.json` won't appear in the sidebar but remain accessible through search and direct links.
+Pages not included in `docs.json` navigation are considered hidden. They:
+- Don't appear in the sidebar
+- Are accessible via direct URL
+- Appear in search results
+- Can be linked from other pages
 
-<Tabs>
-  <Tab title="Use cases">
-    **When to use hidden pages:**
-    - Draft content you're still working on
-    - Internal documentation not ready for public access
-    - Landing pages accessed only through direct links
-    - Archive pages you want to keep accessible but not prominent
-  </Tab>
+Hidden pages are useful for:
+- Draft content
+- Landing pages accessed via specific links
+- Pages you want indexed but not prominently displayed
 
-  <Tab title="Example">
-    If you have a file called `draft-feature.mdx` but don't include it in your navigation:
+### Example Use Case
 
-    ```json
-    {
-      "navigation": {
-        "tabs": [
-          {
-            "tab": "Docs",
-            "groups": [
-              {
-                "group": "Getting Started",
-                "pages": ["quickstart"]
-                // draft-feature.mdx not listed here
-              }
-            ]
-          }
-        ]
-      }
-    }
-    ```
+```
+docs/
+├── index.mdx              # In navigation
+├── quickstart.mdx         # In navigation
+└── beta-features.mdx      # Not in navigation (hidden)
+```
 
-    The page will be:
-    - ✅ Accessible at `yoursite.com/draft-feature`
-    - ✅ Discoverable through search
-    - ❌ Not visible in the navigation sidebar
-  </Tab>
-</Tabs>
+Users can still access `https://yoursite.com/beta-features` directly or find it through search.
 
-## Real-World Example
+## Complete Example
 
-Here's the complete navigation structure from the Mint Starter Kit:
+Here's a full navigation configuration from the Mint Starter Kit:
 
-```json
+```json docs.json
 {
   "navigation": {
     "tabs": [
@@ -442,4 +386,28 @@ Here's the complete navigation structure from the Mint Starter Kit:
 }
 ```
 
-<Tip>Start with a simple structure and gradually add more groups and pages as your documentation grows. You can always reorganize later.</Tip>
+## Best Practices
+
+<Accordion title="Keep Groups Focused">
+Each group should contain 3-7 related pages. If a group grows larger, consider splitting it into multiple groups or using nested navigation.
+</Accordion>
+
+<Accordion title="Use Descriptive Names">
+Group and tab names should clearly indicate their content. Users should understand what they'll find without clicking.
+
+**Good:** "Getting Started", "API Reference", "Deployment Guides"
+
+**Avoid:** "Misc", "Other", "More Info"
+</Accordion>
+
+<Accordion title="Logical Organization">
+Order pages from introductory to advanced content. Place the most commonly accessed pages at the top of each group.
+</Accordion>
+
+<Accordion title="Consistent Structure">
+Maintain similar group structures across tabs. If one tab has "Getting Started" → "Advanced Topics", other tabs should follow similar patterns when applicable.
+</Accordion>
+
+<Tip>
+Update your navigation incrementally as you add content. Don't try to build the entire structure upfront—let it evolve with your documentation needs.
+</Tip>

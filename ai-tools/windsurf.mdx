@@ -1,39 +1,599 @@
 ---
-title: "Windsurf setup"
-description: "Configure Windsurf for your documentation workflow"
-icon: "water"
+title: "Windsurf Setup"
+description: "Configure Windsurf's Cascade AI to streamline your Mintlify documentation workflow with intelligent assistance"
 ---
 
-Set up Windsurf's Cascade AI assistant to help you write and maintain your Mintlify documentation.
+Windsurf is an AI-native code editor featuring Cascade, an advanced AI assistant that understands your entire codebase. With the Mintlify skill installed, Cascade becomes a powerful documentation partner that helps you create, edit, and maintain professional documentation with contextual awareness.
 
 ## Prerequisites
 
-- Windsurf editor installed
+Before setting up Windsurf, ensure you have:
 
-## Setup
+- **Windsurf editor** installed ([download here](https://codeium.com/windsurf))
+- A Mintlify documentation project
+- Basic familiarity with MDX and documentation structure
+
+<Note>
+Windsurf is developed by Codeium and includes Cascade AI as its built-in assistant. No separate AI subscription is required.
+</Note>
+
+## Installation and Setup
 
 <Steps>
-<Step title="Open your docs directory in Windsurf">
-  Open the root of your documentation repository where `docs.json` is located.
+<Step title="Install and launch Windsurf">
+  Download Windsurf from [codeium.com/windsurf](https://codeium.com/windsurf) and install it for your operating system:
+  
+  - **macOS**: Download the `.dmg` file and drag to Applications
+  - **Windows**: Download and run the `.exe` installer
+  - **Linux**: Download the `.deb` or `.rpm` package
+
+  Launch Windsurf after installation completes.
+</Step>
+
+<Step title="Open your documentation project">
+  Open your documentation repository in Windsurf:
+  
+  - Click **File** → **Open Folder**
+  - Navigate to your documentation root (where `mint.json` is located)
+  - Click **Select Folder**
+
+  Cascade will automatically start indexing your project to understand its structure.
+
+  <Tip>
+  Wait for the initial indexing to complete (indicated in the status bar) before proceeding. This ensures Cascade has full context of your documentation.
+  </Tip>
 </Step>
 
 <Step title="Install the Mintlify skill">
-  In the integrated terminal, run:
+  Open the integrated terminal in Windsurf (`` Ctrl+` `` or `` Cmd+` ``) and run:
 
   ```bash
   npx skills add https://mintlify.com/docs
   ```
 
-  This gives Windsurf Mintlify's component reference, writing standards,
-  and workflow guidance.
+  This installs the Mintlify skill, providing Cascade with:
+  - Complete Mintlify component reference and usage patterns
+  - MDX syntax and frontmatter best practices
+  - Documentation writing standards and guidelines
+  - Common documentation workflows and templates
+</Step>
+
+<Step title="Configure Cascade AI settings">
+  Optimize Cascade for documentation work:
+
+  1. Open **Settings** (Cmd/Ctrl + ,)
+  2. Search for "Cascade"
+  3. Recommended settings:
+     - **Context Window**: Maximum (for full page awareness)
+     - **Auto-suggestions**: Enabled
+     - **File Awareness**: Enabled
+     - **Codebase Indexing**: Enabled
+
+  <Accordion title="Advanced Cascade settings">
+  For large documentation sites:
+  - Enable **Smart Context Selection** to prioritize relevant files
+  - Set **Max Context Files** to 20-30 for better performance
+  - Enable **Semantic Search** for better cross-reference suggestions
+  </Accordion>
 </Step>
 
 <Step title="Customize project instructions">
-  Edit `AGENTS.md` in your project root to add project-specific terminology,
-  style preferences, and content boundaries.
+  Create or edit `AGENTS.md` in your project root to provide project-specific context:
+
+  ```markdown
+  # Documentation Project Guide
+
+  ## Project Overview
+  - Product: CloudSync API Platform
+  - Audience: Backend developers and DevOps engineers
+  - Complexity: Intermediate to advanced
+
+  ## Terminology
+  - Use "sync job" not "synchronization task"
+  - Use "endpoint" not "route" or "API path"
+  - Use "authentication token" not "auth token" or "API key"
+
+  ## Writing Standards
+  - Sentence case for all headings
+  - Code examples must be tested and working
+  - Always include error handling in examples
+  - Add descriptions to all frontmatter
+
+  ## Component Usage
+  - Use <Steps> for all sequential processes
+  - Use <Warning> for security and data loss risks
+  - Use <Tip> for optional optimizations
+  - Use <CodeGroup> for multi-language examples
+
+  ## Content Scope
+  - Public API endpoints only
+  - No internal tooling documentation
+  - No pricing or sales information
+  ```
+
+  <Tip>
+  The more detailed your `AGENTS.md`, the more consistent and accurate Cascade's documentation assistance will be.
+  </Tip>
 </Step>
 
-<Step title="Start writing with Cascade">
-  Open a file and use Cascade to draft and edit documentation.
+<Step title="Start using Cascade">
+  Open Cascade by:
+  - Clicking the **Cascade** icon in the left sidebar
+  - Using the keyboard shortcut: `Cmd+Shift+C` (Mac) or `Ctrl+Shift+C` (Windows/Linux)
+  - Using the command palette: `Cmd/Ctrl+Shift+P` → "Open Cascade"
+
+  You're now ready to start building documentation with AI assistance!
 </Step>
 </Steps>
+
+## Using Cascade for Documentation
+
+### Creating New Documentation Pages
+
+<Accordion title="Generate a complete page from scratch">
+Open Cascade and use detailed prompts to create comprehensive pages:
+
+```
+Create a new documentation page at api/webhooks.mdx that covers:
+
+1. YAML frontmatter with title "Webhooks" and description
+2. Overview explaining what webhooks are and why to use them
+3. Prerequisites section listing requirements
+4. Setup instructions using <Steps> component:
+   - Creating a webhook endpoint
+   - Configuring webhook URL in dashboard
+   - Verifying webhook signature
+5. Payload examples in <CodeGroup> with JSON schema
+6. Event types reference table
+7. Troubleshooting section with common issues
+8. Security best practices in a <Warning> callout
+
+Use the Mintlify skill for proper component syntax.
+```
+
+Cascade will generate the complete page with proper structure and components.
+</Accordion>
+
+### Editing Existing Content
+
+<CodeGroup>
+```plaintext Inline Edits
+# Select text in the editor
+# Right-click → "Ask Cascade"
+# Or use Cmd+K / Ctrl+K
+
+Example prompts:
+- "Make this paragraph more concise"
+- "Add a code example for Python"
+- "Rewrite in active voice"
+- "Add error handling to this example"
+```
+
+```plaintext Chat-Based Edits
+# Open Cascade chat panel
+# Reference files with @
+
+@api/authentication.mdx improve the OAuth 
+section by adding a sequence diagram and 
+expanding the token refresh explanation
+
+@getting-started/quickstart.mdx add 
+prerequisites and a video embed
+```
+
+```plaintext Multi-File Operations
+# Cascade can work across multiple files
+
+Update all pages in the /api directory:
+1. Add API version badge to frontmatter
+2. Include rate limiting info in each endpoint
+3. Ensure all examples show error handling
+4. Add "Try it" OpenAPI links where applicable
+```
+</CodeGroup>
+
+### Intelligent Autocompletion
+
+Cascade provides context-aware suggestions as you type:
+
+<Tip>
+Start typing a Mintlify component like `<Ste` and Cascade will suggest the complete `<Steps>` structure with nested `<Step>` components and proper closing tags.
+</Tip>
+
+### Codebase-Aware Documentation
+
+Cascade's indexing enables powerful cross-referencing:
+
+<Accordion title="Linking code to documentation">
+```
+@src/api/users.ts @docs/api/users.mdx
+
+Review the users.ts implementation and update 
+the documentation to reflect:
+- New query parameters added
+- Changed response format
+- Deprecated fields (add warnings)
+```
+
+Cascade will compare the code and docs to suggest accurate updates.
+</Accordion>
+
+## Advanced Workflows
+
+### Cascade Flow Mode
+
+<Note>
+**Flow Mode** enables Cascade to make autonomous multi-step changes across your documentation project.
+</Note>
+
+To activate Flow Mode:
+
+1. Open Cascade
+2. Click the **Flow** toggle
+3. Provide high-level instructions
+
+<CodeGroup>
+```plaintext Flow Mode Example
+Enable Flow Mode and execute:
+
+"Audit all documentation pages for Mintlify 
+best practices:
+- Check all frontmatter has descriptions
+- Verify code blocks have language tags
+- Ensure proper component usage
+- Fix any broken internal links
+- Add missing alt text to images
+
+Create a summary report of changes made."
+```
+
+```plaintext Expected Outcome
+Cascade will:
+1. Scan all .mdx files
+2. Identify issues
+3. Make corrections autonomously
+4. Generate a detailed report
+
+All while you focus on other tasks.
+```
+</CodeGroup>
+
+### Documentation Review and Quality Assurance
+
+<Accordion title="Comprehensive documentation review">
+Use Cascade to perform quality reviews:
+
+```
+Review all pages in /guides directory and check for:
+
+Quality Issues:
+- Unclear or ambiguous language
+- Incomplete explanations
+- Missing prerequisites
+- Lack of examples
+
+Technical Issues:
+- Incorrect component usage
+- Missing frontmatter fields
+- Broken links or references
+- Untested code examples
+
+Consistency Issues:
+- Terminology not matching AGENTS.md
+- Inconsistent heading capitalization
+- Varied code example formats
+
+Provide a prioritized list of improvements.
+```
+</Accordion>
+
+### Template-Based Page Creation
+
+<Accordion title="Creating reusable documentation templates">
+Build a library of templates with Cascade:
+
+```
+Create a template for API endpoint documentation 
+that includes:
+
+Frontmatter:
+- title: "[Endpoint Name]"
+- description: "..."
+- api: "METHOD /path"
+
+Structure:
+- Overview paragraph
+- Authentication requirements
+- Request parameters table
+- Request body schema (if applicable)
+- Response schema with examples
+- Error responses table
+- Rate limiting info
+- Code examples in curl, Python, and JavaScript
+
+Save this as .github/TEMPLATES/endpoint.mdx
+```
+
+Then reuse it:
+```
+Using .github/TEMPLATES/endpoint.mdx as a template,
+create documentation for POST /api/v1/users
+```
+</Accordion>
+
+## Pro Tips and Best Practices
+
+<AccordionGroup>
+<Accordion title="Maximize Cascade's contextual awareness">
+**Reference specific files** using `@` mentions:
+- `@mint.json` - For navigation and configuration context
+- `@AGENTS.md` - To remind Cascade of project guidelines
+- `@existing-page.mdx` - To maintain consistent style
+
+**Example prompt:**
+```
+@AGENTS.md @api/authentication.mdx 
+
+Following our project terminology standards,
+expand the authentication page with OAuth 2.0
+PKCE flow instructions.
+```
+</Accordion>
+
+<Accordion title="Effective prompt engineering for docs">
+**Structure your prompts with clear sections:**
+
+```
+Create documentation for [feature]:
+
+Context: [Background information]
+Audience: [Target reader expertise level]
+Goal: [What reader should achieve]
+Structure: [Required sections]
+Components: [Specific Mintlify components to use]
+Examples: [What kind of examples to include]
+```
+
+**Bad prompt:** "Document the API"
+
+**Good prompt:**
+```
+Create comprehensive API documentation for the 
+Users endpoint:
+
+Context: RESTful API for user management
+Audience: Backend developers, intermediate level
+Goal: Enable CRUD operations on user resources
+
+Structure:
+- Overview with use cases
+- Authentication requirements
+- Endpoint reference (LIST, GET, CREATE, UPDATE, DELETE)
+- Request/response schemas
+- Error codes and handling
+- Rate limits and pagination
+
+Components: Use <Tabs> for different operations,
+<CodeGroup> for multi-language examples
+
+Examples: Include curl, Python requests, and 
+JavaScript fetch for each operation
+```
+</Accordion>
+
+<Accordion title="Leveraging Cascade for documentation maintenance">
+**Set up recurring documentation health checks:**
+
+```
+Every time I open this project, review:
+1. Recently modified source files
+2. Documentation pages that reference those files
+3. Suggest updates where docs are outdated
+
+Focus on the /api directory.
+```
+
+**Automated consistency checks:**
+```
+Scan all .mdx files and report:
+- Pages without descriptions in frontmatter
+- Code blocks without language tags
+- Uses of deprecated components
+- Inconsistent heading levels (e.g., h1 → h4)
+- Broken inter-page links
+```
+</Accordion>
+
+<Accordion title="Collaborative documentation workflows">
+When working in teams:
+
+1. **Standardize `AGENTS.md`** - Share project guidelines with all team members
+2. **Use consistent terminology** - Cascade will enforce standards from `AGENTS.md`
+3. **Review Cascade suggestions** - AI-generated content should be reviewed before committing
+4. **Document your templates** - Store page templates in `.github/TEMPLATES/`
+5. **Sync Mintlify skill** - Ensure all team members run `npx skills add https://mintlify.com/docs`
+</Accordion>
+</AccordionGroup>
+
+## Keyboard Shortcuts
+
+<CodeGroup>
+```plaintext Cascade Controls
+Cmd/Ctrl + Shift + C    Open/close Cascade
+Cmd/Ctrl + K            Inline AI edit
+Cmd/Ctrl + L            Focus Cascade chat
+Cmd/Ctrl + Enter        Submit Cascade prompt
+Esc                     Cancel current operation
+```
+
+```plaintext Navigation
+Cmd/Ctrl + P            Quick file navigation
+Cmd/Ctrl + Shift + F    Search across all files
+Cmd/Ctrl + G            Go to line
+Cmd/Ctrl + B            Toggle sidebar
+```
+
+```plaintext Editing
+Cmd/Ctrl + /            Toggle comment
+Cmd/Ctrl + D            Select next occurrence
+Cmd/Ctrl + Shift + L    Select all occurrences
+Alt + Up/Down           Move line up/down
+```
+</CodeGroup>
+
+## Troubleshooting
+
+<AccordionGroup>
+<Accordion title="Cascade not responding or slow">
+**Common causes and solutions:**
+
+1. **Large project indexing in progress**
+   - Wait for indexing to complete (check status bar)
+   - Close unnecessary tabs to reduce context
+
+2. **Context window exceeded**
+   - Be more specific in prompts (reference specific files)
+   - Break large tasks into smaller chunks
+
+3. **Network issues**
+   - Check internet connection
+   - Restart Windsurf
+
+**Performance optimization:**
+```json
+// .windsurf/settings.json
+{
+  "cascade.contextWindow": "medium",
+  "cascade.maxContextFiles": 25,
+  "cascade.smartContextSelection": true
+}
+```
+</Accordion>
+
+<Accordion title="Mintlify skill not being used">
+**Verify skill installation:**
+
+```bash
+# Check if skill is installed
+ls -la ~/.skills/ | grep mintlify
+
+# Reinstall if necessary
+npx skills add https://mintlify.com/docs --force
+
+# Restart Windsurf after reinstalling
+```
+
+**Explicitly reference the skill:**
+```
+Using the Mintlify skill, create an API reference
+page with proper component usage...
+```
+</Accordion>
+
+<Accordion title="Generated content doesn't match style">
+**Improve `AGENTS.md` specificity:**
+
+```markdown
+## Style Examples
+
+❌ Avoid: "The API can be accessed by users"
+✅ Prefer: "Access the API by authenticating with your API key"
+
+❌ Avoid: "It's possible to configure webhooks"
+✅ Prefer: "Configure webhooks in your dashboard settings"
+
+## Component Usage Examples
+
+For setup processes:
+<Steps>
+<Step title="First step title">
+  Clear, concise instructions
+</Step>
+</Steps>
+
+For warnings:
+<Warning>
+Security-critical information or data loss risks
+</Warning>
+```
+</Accordion>
+
+<Accordion title="Cascade makes unauthorized changes in Flow Mode">
+**Flow Mode safety tips:**
+
+1. **Review before enabling** - Understand what you're asking Cascade to do
+2. **Use version control** - Commit before running Flow Mode operations
+3. **Start small** - Test Flow Mode on a single directory first
+4. **Be specific** - Clearly define boundaries and constraints
+
+**Example safe Flow Mode prompt:**
+```
+Enable Flow Mode for /api directory only.
+
+Update endpoint documentation to include:
+- Response status codes
+- Error examples
+
+DO NOT:
+- Change any URLs or file names
+- Modify navigation structure
+- Edit frontmatter titles
+- Remove existing content
+
+Generate a summary of changes before applying.
+```
+</Accordion>
+</AccordionGroup>
+
+## Cascade Commands Reference
+
+<CodeGroup>
+```plaintext Documentation Tasks
+@cascade create page [path]
+@cascade review [file/directory]
+@cascade update [file] based on @[source]
+@cascade check [file] for issues
+@cascade suggest improvements for [file]
+```
+
+```plaintext Content Operations
+@cascade add example to [file]
+@cascade expand section [heading] in [file]
+@cascade simplify [paragraph/section]
+@cascade add diagrams to [file]
+```
+
+```plaintext Quality Assurance
+@cascade lint all documentation
+@cascade check for broken links
+@cascade verify code examples
+@cascade audit component usage
+```
+
+```plaintext Batch Operations
+@cascade update all files in [directory]
+@cascade standardize [aspect] across [directory]
+@cascade generate navigation for [directory]
+```
+</CodeGroup>
+
+## Next Steps
+
+<CardGroup cols={2}>
+<Card title="Cursor Setup" icon="arrow-pointer" href="/ai-tools/cursor">
+  Explore Cursor for alternative AI-assisted editing
+</Card>
+<Card title="Claude Code Setup" icon="asterisk" href="/ai-tools/claude-code">
+  Set up Claude Code CLI for terminal-based documentation
+</Card>
+<Card title="Writing Guide" icon="pen" href="/essentials/writing-style">
+  Learn Mintlify documentation best practices
+</Card>
+<Card title="Component Library" icon="puzzle-piece" href="/components/overview">
+  Explore all available Mintlify components
+</Card>
+</CardGroup>
+
+<Tip>
+**Pro Tip:** Combine Windsurf with Git workflows for the best experience. Cascade can help you create branches, review changes, and write commit messages for documentation updates.
+</Tip>

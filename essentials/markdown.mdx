@@ -1,110 +1,187 @@
 ---
 title: 'Markdown syntax'
-description: 'Write and format content using standard markdown and MDX'
+description: 'Master MDX syntax and Mintlify components to create beautiful documentation'
 ---
 
-Mintlify supports standard markdown syntax along with MDX components. You can use markdown for basic text formatting and enhance your docs with interactive components.
+## What is MDX?
 
-## Titles
+MDX combines the simplicity of Markdown with the power of JSX, allowing you to use interactive components directly in your documentation. Mintlify extends MDX with beautiful pre-built components that make your docs stand out.
 
-Best used for section headers.
+<Note>
+MDX files have a `.mdx` extension and support both standard Markdown syntax and React components.
+</Note>
 
-```md
-## Titles
-```
+## Titles and headers
 
-### Subtitles
+Headers create your page structure and automatically generate the table of contents.
 
-Best used for subsection headers.
-
-```md
-### Subtitles
-```
+<Tabs>
+  <Tab title="Rendered">
+    ## Main section
+    ### Subsection
+    #### Minor heading
+  </Tab>
+  <Tab title="Markdown">
+    ```md
+    ## Main section
+    ### Subsection
+    #### Minor heading
+    ```
+  </Tab>
+</Tabs>
 
 <Tip>
-Each **title** and **subtitle** creates an anchor and also shows up on the table of contents on the right.
+Each title and subtitle creates an anchor link and appears in the right-side table of contents for easy navigation.
 </Tip>
 
 ## Text formatting
 
-We support most markdown formatting. Simply add `**`, `_`, or `~` around text to format it.
+Format text using simple Markdown syntax or HTML tags for more advanced styling.
 
-| Style         | How to write it   | Result          |
+### Basic formatting
+
+| Style         | Syntax            | Result          |
 | ------------- | ----------------- | --------------- |
 | Bold          | `**bold**`        | **bold**        |
 | Italic        | `_italic_`        | _italic_        |
 | Strikethrough | `~strikethrough~` | ~strikethrough~ |
+| Inline code   | `` `code` ``      | `code`          |
 
-You can combine these. For example, write `**_bold and italic_**` to get **_bold and italic_** text.
+Combine styles for emphasis: `**_bold and italic_**` renders as **_bold and italic_**.
 
-You need to use HTML to write superscript and subscript text. That is, add `<sup>` or `<sub>` around your text.
+### Superscript and subscript
 
-| Text Size   | How to write it          | Result                 |
+Use HTML tags for scientific notation and mathematical expressions:
+
+| Style       | Syntax                   | Result                 |
 | ----------- | ------------------------ | ---------------------- |
 | Superscript | `<sup>superscript</sup>` | <sup>superscript</sup> |
 | Subscript   | `<sub>subscript</sub>`   | <sub>subscript</sub>   |
 
-## Linking to pages
+Example: H<sub>2</sub>O or E = mc<sup>2</sup>
 
-You can add a link by wrapping text in `[]()`. You would write `[link to google](https://google.com)` to [link to google](https://google.com).
+## Links
 
-Links to pages in your docs need to be root-relative. Basically, you should include the entire folder path. For example, `[link to code blocks](/essentials/code)` links to the code blocks page.
-
-<Warning>
-Relative links like `[link to page](../page)` will open slower because we cannot optimize them as easily. Always use root-relative paths.
-</Warning>
+<Steps>
+  <Step title="External links">
+    Link to external sites using standard Markdown syntax:
+    
+    ```md
+    [Visit Mintlify](https://mintlify.com)
+    ```
+    
+    Result: [Visit Mintlify](https://mintlify.com)
+  </Step>
+  
+  <Step title="Internal links">
+    Use root-relative paths for internal documentation links:
+    
+    ```md
+    [Code blocks](/essentials/code)
+    ```
+    
+    This ensures Mintlify can optimize page loading and navigation.
+  </Step>
+  
+  <Step title="Avoid relative paths">
+    While `../code` works, it's slower because Mintlify can't pre-optimize these links.
+  </Step>
+</Steps>
 
 ## Blockquotes
 
-### Singleline
+Create emphasis or highlight important information with blockquotes.
 
-To create a blockquote, add a `>` in front of a paragraph.
+<Tabs>
+  <Tab title="Single line">
+    > A single line of quoted text.
+    
+    ```md
+    > A single line of quoted text.
+    ```
+  </Tab>
+  
+  <Tab title="Multiple lines">
+    > Documentation is a love letter that you write to your future self.
+    >
+    > Make it clear, concise, and helpful.
+    
+    ```md
+    > Documentation is a love letter that you write to your future self.
+    >
+    > Make it clear, concise, and helpful.
+    ```
+  </Tab>
+</Tabs>
 
-> Dorothy followed her through many of the beautiful rooms in her castle.
+## Mintlify callout components
 
-```md
-> Dorothy followed her through many of the beautiful rooms in her castle.
+Enhance your documentation with eye-catching callouts that draw attention to important information.
+
+<Accordion title="View all callout types">
+
+<Note>
+**Note** - General information and helpful tips
+```mdx
+<Note>
+This is a note callout. Use it for helpful information.
+</Note>
 ```
+</Note>
 
-### Multiline
-
-> Dorothy followed her through many of the beautiful rooms in her castle.
->
-> The Witch bade her clean the pots and kettles and sweep the floor and keep the fire fed with wood.
-
-```md
-> Dorothy followed her through many of the beautiful rooms in her castle.
->
-> The Witch bade her clean the pots and kettles and sweep the floor and keep the fire fed with wood.
+<Tip>
+**Tip** - Best practices and recommendations
+```mdx
+<Tip>
+This is a tip callout. Great for best practices!
+</Tip>
 ```
+</Tip>
+
+<Warning>
+**Warning** - Cautionary information users should be aware of
+```mdx
+<Warning>
+This is a warning. Use it for important cautions.
+</Warning>
+```
+</Warning>
+
+<Info>
+**Info** - Additional context and details
+```mdx
+<Info>
+This is an info callout for extra context.
+</Info>
+```
+</Info>
+
+</Accordion>
 
 ## Lists
 
 ### Unordered lists
 
-Create unordered lists using `-`, `*`, or `+`:
-
-- First item
-- Second item
-- Third item
-  - Nested item
-  - Another nested item
+Create bullet lists with `-`, `*`, or `+`:
 
 ```md
 - First item
 - Second item
-- Third item
   - Nested item
   - Another nested item
+- Third item
 ```
+
+Result:
+- First item
+- Second item
+  - Nested item
+  - Another nested item
+- Third item
 
 ### Ordered lists
 
-Create ordered lists using numbers:
-
-1. First step
-2. Second step
-3. Third step
+Use numbers for sequential steps:
 
 ```md
 1. First step
@@ -112,65 +189,75 @@ Create ordered lists using numbers:
 3. Third step
 ```
 
-## LaTeX
+Result:
+1. First step
+2. Second step
+3. Third step
 
-Mintlify supports [LaTeX](https://www.latex-project.org) through the Latex component.
+## Mathematical expressions
 
+Mintlify supports LaTeX for mathematical formulas and equations.
+
+<CodeGroup>
+
+```mdx Simple formula
+<Latex>f(x) = x^2 + 2x + 1</Latex>
+```
+
+```mdx Complex equation
 <Latex>8 x (vk x H1 - H2) = (0,1)</Latex>
-
-```md
-<Latex>8 x (vk x H1 - H2) = (0,1)</Latex>
 ```
 
-## Callout components
+</CodeGroup>
 
-Use callout components to highlight important information:
+**Rendered:**
 
-<Note>
-This is a note callout. Use it for helpful information.
-</Note>
+<Latex>f(x) = x^2 + 2x + 1</Latex>
 
-<Tip>
-This is a tip callout. Use it for best practices and pro tips.
-</Tip>
+## Cards for navigation
 
-<Warning>
-This is a warning callout. Use it for important warnings.
-</Warning>
+Create beautiful card-based navigation using the Card and CardGroup components:
 
-```md
-<Note>
-This is a note callout. Use it for helpful information.
-</Note>
+<CardGroup cols={2}>
 
-<Tip>
-This is a tip callout. Use it for best practices and pro tips.
-</Tip>
+<Card title="Code blocks" icon="code" href="/essentials/code">
+  Learn about syntax highlighting and code examples
+</Card>
 
-<Warning>
-This is a warning callout. Use it for important warnings.
-</Warning>
+<Card title="Images" icon="image" href="/essentials/images">
+  Add images and media to your documentation
+</Card>
+
+<Card title="Reusable snippets" icon="recycle" href="/essentials/reusable-snippets">
+  Keep your content DRY with reusable snippets
+</Card>
+
+<Card title="Settings" icon="gear" href="/essentials/settings">
+  Customize your documentation site
+</Card>
+
+</CardGroup>
+
+```mdx
+<CardGroup cols={2}>
+  <Card title="Title" icon="icon-name" href="/path">
+    Description text
+  </Card>
+</CardGroup>
 ```
 
-## Accordion
+## Next steps
 
-Use accordions to organize content that users can expand and collapse:
-
-<Accordion title="Why use accordions?">
-Accordions help reduce visual clutter by hiding content until users need it. They're perfect for FAQs, optional details, and supplementary information.
-</Accordion>
-
-<Accordion title="Can I nest content inside?">
-Yes! You can include any markdown or MDX content inside an accordion:
-
-- Lists
-- Code blocks
-- Images
-- Other components
-</Accordion>
-
-```md
-<Accordion title="Why use accordions?">
-Accordions help reduce visual clutter by hiding content until users need it.
-</Accordion>
-```
+<AccordionGroup>
+  <Accordion icon="code" title="Add code blocks">
+    Learn how to add syntax-highlighted code examples with line numbers, tabs, and more in the [code blocks guide](/essentials/code).
+  </Accordion>
+  
+  <Accordion icon="image" title="Include images">
+    Discover how to add images, videos, and other media in the [images guide](/essentials/images).
+  </Accordion>
+  
+  <Accordion icon="recycle" title="Reuse content">
+    Keep your documentation DRY with [reusable snippets](/essentials/reusable-snippets).
+  </Accordion>
+</AccordionGroup>

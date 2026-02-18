@@ -1,84 +1,63 @@
 ---
 title: 'Get Plants'
+description: 'Retrieve a list of plants from the Plant Store API'
 openapi: 'GET /plants'
 ---
 
-Retrieve all plants from the system that the user has access to. This endpoint returns a paginated list of plants with their details.
+## Overview
 
-## Endpoint
+The `GET /plants` endpoint returns all plants from the system that the authenticated user has access to. This endpoint supports pagination through the `limit` parameter and returns a JSON array of plant objects.
 
-```
-GET /plants
-```
+<Note>
+This endpoint requires authentication using a Bearer token in the Authorization header.
+</Note>
 
-## Authentication
+## Request
 
-This endpoint requires Bearer token authentication. Include your token in the Authorization header:
+### Query Parameters
 
-```bash
-curl -X GET "http://sandbox.mintlify.com/plants?limit=10" \
-  -H "Authorization: Bearer YOUR_API_TOKEN"
-```
-
-## Query Parameters
-
-<ParamField query="limit" type="integer" format="int32">
-  The maximum number of results to return. Use this parameter to control pagination and limit the response size.
+<ParamField query="limit" type="integer" optional>
+  The maximum number of results to return. Use this parameter to implement pagination and control the size of the response payload.
   
-  <Expandable title="Details">
-    - Accepts integer values
-    - Format: int32
-    - Optional parameter
-    - Useful for implementing pagination in your application
-  </Expandable>
+  **Example values:**
+  - `10` - Returns up to 10 plants
+  - `50` - Returns up to 50 plants
+  - `100` - Returns up to 100 plants
+</ParamField>
+
+### Headers
+
+<ParamField header="Authorization" type="string" required>
+  Bearer token for authentication. Format: `Bearer YOUR_ACCESS_TOKEN`
 </ParamField>
 
 ## Response
 
 <ResponseField name="plants" type="array">
-  An array of plant objects that match the query criteria.
+  An array of plant objects representing all plants the user has access to.
   
   <Expandable title="Plant Object">
-    <ResponseField name="name" type="string" required>
-      The name of the plant
+    <ResponseField name="id" type="integer">
+      Unique identifier for the plant
+    </ResponseField>
+    
+    <ResponseField name="name" type="string">
+      The name of the plant (required)
     </ResponseField>
     
     <ResponseField name="tag" type="string">
-      Tag to specify the type of plant (e.g., "succulent", "flowering", "tropical")
-    </ResponseField>
-    
-    <ResponseField name="id" type="integer" format="int64">
-      Identification number of the plant
+      Optional tag to specify the plant type or category
     </ResponseField>
   </Expandable>
 </ResponseField>
 
-## Status Codes
-
-<ResponseField name="200" type="Success">
-  Plant response returned successfully
-</ResponseField>
-
-<ResponseField name="400" type="Error">
-  Unexpected error occurred
-  
-  <Expandable title="Error Response">
-    ```json
-    {
-      "error": 400,
-      "message": "Error description"
-    }
-    ```
-  </Expandable>
-</ResponseField>
-
-## Example Request
+## Examples
 
 <CodeGroup>
 
 ```bash cURL
 curl -X GET "http://sandbox.mintlify.com/plants?limit=10" \
-  -H "Authorization: Bearer YOUR_API_TOKEN" \
+  -H "Authorization: Bearer YOUR_ACCESS_TOKEN" \
   -H "Content-Type: application/json"
 ```
 
@@ -86,7 +65,7 @@ curl -X GET "http://sandbox.mintlify.com/plants?limit=10" \
 const response = await fetch('http://sandbox.mintlify.com/plants?limit=10', {
   method: 'GET',
   headers: {
-    'Authorization': 'Bearer YOUR_API_TOKEN',
+    'Authorization': 'Bearer YOUR_ACCESS_TOKEN',
     'Content-Type': 'application/json'
   }
 });
@@ -100,14 +79,44 @@ import requests
 
 url = "http://sandbox.mintlify.com/plants"
 headers = {
-    "Authorization": "Bearer YOUR_API_TOKEN",
+    "Authorization": "Bearer YOUR_ACCESS_TOKEN",
     "Content-Type": "application/json"
 }
-params = {"limit": 10}
+params = {
+    "limit": 10
+}
 
 response = requests.get(url, headers=headers, params=params)
 plants = response.json()
 print(plants)
+```
+
+```go Go
+package main
+
+import (
+    "fmt"
+    "io"
+    "net/http"
+)
+
+func main() {
+    url := "http://sandbox.mintlify.com/plants?limit=10"
+    
+    req, _ := http.NewRequest("GET", url, nil)
+    req.Header.Add("Authorization", "Bearer YOUR_ACCESS_TOKEN")
+    req.Header.Add("Content-Type", "application/json")
+    
+    client := &http.Client{}
+    resp, err := client.Do(req)
+    if err != nil {
+        panic(err)
+    }
+    defer resp.Body.Close()
+    
+    body, _ := io.ReadAll(resp.Body)
+    fmt.Println(string(body))
+}
 ```
 
 ```ruby Ruby
@@ -115,23 +124,22 @@ require 'net/http'
 require 'json'
 
 uri = URI('http://sandbox.mintlify.com/plants?limit=10')
-request = Net::HTTP::Get.new(uri)
-request['Authorization'] = 'Bearer YOUR_API_TOKEN'
+
+http = Net::HTTP.new(uri.host, uri.port)
+request = Net::HTTP::Get.new(uri.path)
+request['Authorization'] = 'Bearer YOUR_ACCESS_TOKEN'
 request['Content-Type'] = 'application/json'
 
-response = Net::HTTP.start(uri.hostname, uri.port) do |http|
-  http.request(request)
-end
-
+response = http.request(request)
 plants = JSON.parse(response.body)
 puts plants
 ```
 
 </CodeGroup>
 
-## Example Response
+### Success Response
 
-```json 200 Success
+```json 200 OK
 [
   {
     "id": 1,
@@ -145,23 +153,123 @@ puts plants
   },
   {
     "id": 3,
-    "name": "Pothos",
-    "tag": "vine"
+    "name": "Fiddle Leaf Fig",
+    "tag": "tropical"
   }
 ]
 ```
 
-```json 400 Error
+### Error Response
+
+```json 400 Bad Request
 {
   "error": 400,
   "message": "Invalid limit parameter. Must be a positive integer."
 }
 ```
 
-<Note>
-  The response returns an array of plant objects. If no plants are found or the user has no access, an empty array is returned.
-</Note>
+## Use Cases
 
-<Tip>
-  Use the `limit` parameter to implement pagination efficiently. For large datasets, make multiple requests with appropriate limits to avoid timeouts.
-</Tip>
+<CardGroup cols={2}>
+  <Card title="Catalog Display" icon="grid">
+    Fetch all plants to display in a catalog or gallery view in your application
+  </Card>
+  
+  <Card title="Search & Filter" icon="filter">
+    Retrieve plants and implement client-side filtering by name or tag
+  </Card>
+  
+  <Card title="Inventory Management" icon="boxes-stacked">
+    Monitor plant inventory and track available items in your store
+  </Card>
+  
+  <Card title="Data Synchronization" icon="arrows-rotate">
+    Periodically sync plant data between systems using pagination
+  </Card>
+</CardGroup>
+
+## Best Practices
+
+<AccordionGroup>
+  <Accordion title="Implement pagination for large datasets">
+    Always use the `limit` parameter to control response size. Start with a reasonable limit (e.g., 20-50 items) and implement pagination in your UI.
+    
+    ```javascript
+    // Fetch plants in batches
+    async function fetchPlantsBatch(limit = 20) {
+      const response = await fetch(
+        `http://sandbox.mintlify.com/plants?limit=${limit}`,
+        {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        }
+      );
+      return response.json();
+    }
+    ```
+  </Accordion>
+  
+  <Accordion title="Cache responses to reduce API calls">
+    Cache plant data locally and refresh periodically to minimize unnecessary API requests and improve performance.
+    
+    ```javascript
+    const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
+    let cachedPlants = null;
+    let cacheTimestamp = null;
+    
+    async function getCachedPlants() {
+      const now = Date.now();
+      if (cachedPlants && (now - cacheTimestamp) < CACHE_DURATION) {
+        return cachedPlants;
+      }
+      
+      cachedPlants = await fetchPlants();
+      cacheTimestamp = now;
+      return cachedPlants;
+    }
+    ```
+  </Accordion>
+  
+  <Accordion title="Handle errors gracefully">
+    Implement proper error handling for network failures, authentication errors, and invalid responses.
+    
+    ```javascript
+    try {
+      const response = await fetch('http://sandbox.mintlify.com/plants', {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+      }
+      
+      const plants = await response.json();
+      return plants;
+    } catch (error) {
+      console.error('Failed to fetch plants:', error);
+      // Show user-friendly error message
+    }
+    ```
+  </Accordion>
+  
+  <Accordion title="Secure your authentication tokens">
+    Never expose Bearer tokens in client-side code or logs. Store tokens securely and use environment variables for sensitive credentials.
+  </Accordion>
+</AccordionGroup>
+
+<Warning>
+Rate limiting applies to this endpoint. Excessive requests may result in temporary throttling. Implement caching and respect rate limits to ensure reliable service.
+</Warning>
+
+## Related Endpoints
+
+<CardGroup cols={2}>
+  <Card title="Create Plant" icon="plus" href="/api-reference/endpoint/create">
+    Add a new plant to the store
+  </Card>
+  
+  <Card title="Delete Plant" icon="trash" href="/api-reference/endpoint/delete">
+    Remove a plant from the store
+  </Card>
+</CardGroup>

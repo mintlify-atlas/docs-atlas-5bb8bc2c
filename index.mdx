@@ -1,111 +1,204 @@
 ---
-title: "Introduction"
-description: "Build beautiful documentation that helps your users succeed"
+title: "Welcome to Mintlify"
+description: "Build beautiful, modern documentation that your users will love"
 ---
 
-## Get started in minutes
+<Note>
+  **New to Mintlify?** This starter kit helps you create production-ready documentation in minutes. Follow the quickstart guide to get up and running.
+</Note>
 
-Mintlify makes it easy to create documentation that looks great and empowers your users. Build with MDX, customize to match your brand, and deploy automatically.
+## What is Mintlify?
 
-<Card
-  title="Start here"
-  icon="rocket"
-  href="/quickstart"
-  horizontal
->
-  Follow our quickstart guide to get your docs running locally in three steps.
-</Card>
-
-## Make it yours
-
-Design a documentation site that matches your brand and helps users find what they need.
+Mintlify is a modern documentation platform that transforms MDX files into beautiful, interactive documentation sites. Built for developers and technical teams, it combines powerful features with an intuitive editing experience.
 
 <CardGroup cols={2}>
-  <Card
-    title="Edit locally"
-    icon="pen-to-square"
-    href="/development"
-  >
-    Install the Mintlify CLI to preview changes locally as you edit.
+  <Card title="Fast Setup" icon="rocket" color="#16A34A">
+    Go from zero to published docs in under 5 minutes with our CLI and GitHub integration
   </Card>
-  <Card
-    title="Customize your site"
-    icon="palette"
-    href="/essentials/settings"
-  >
-    Update colors, fonts, and design to match your brand identity.
+  <Card title="Beautiful Design" icon="sparkles" color="#16A34A">
+    Gorgeous out-of-the-box themes that adapt to your brand colors and style
   </Card>
-  <Card
-    title="Set up navigation"
-    icon="map"
-    href="/essentials/navigation"
-  >
-    Organize your docs to help users find what they need and succeed with your product.
+  <Card title="Developer First" icon="code" color="#16A34A">
+    Write in MDX, preview locally, and deploy automatically with Git
   </Card>
-  <Card
-    title="API documentation"
-    icon="terminal"
-    href="/api-reference/introduction"
-  >
-    Auto-generate API documentation from OpenAPI specifications.
+  <Card title="Rich Components" icon="puzzle-piece" color="#16A34A">
+    Interactive components like tabs, accordions, code groups, and more
   </Card>
 </CardGroup>
 
-## Create beautiful pages
+## Get Started
 
-Everything you need to build world-class documentation.
+<Steps>
+  <Step title="Quick Start">
+    Follow our three-step guide to install the CLI, preview locally, and deploy your first changes.
+    
+    <Card title="Start the Quickstart" icon="play" href="/quickstart" horizontal>
+      Set up your documentation site in 5 minutes
+    </Card>
+  </Step>
 
-<CardGroup cols={2}>
-  <Card
-    title="Write with MDX"
-    icon="pen-fancy"
-    href="/essentials/markdown"
-  >
-    Use MDX to style your docs pages with rich components.
-  </Card>
-  <Card
-    title="Code samples"
-    icon="code"
-    href="/essentials/code"
-  >
-    Add syntax-highlighted code blocks to demonstrate how to use your product.
-  </Card>
-  <Card
-    title="Images"
-    icon="image"
-    href="/essentials/images"
-  >
-    Display images and other media with built-in optimization.
-  </Card>
-  <Card
-    title="Reusable snippets"
-    icon="recycle"
-    href="/essentials/reusable-snippets"
-  >
-    Write once and reuse content across your docs.
-  </Card>
-</CardGroup>
+  <Step title="Local Development">
+    Learn how to edit your docs locally with instant preview and hot reload.
+    
+    <Card title="Development Guide" icon="laptop-code" href="/development" horizontal>
+      Install the CLI and preview changes locally
+    </Card>
+  </Step>
 
-## AI-assisted writing
+  <Step title="Customize Your Site">
+    Make your docs uniquely yours with custom branding, navigation, and styling.
+    
+    <Card title="Customization Options" icon="palette" href="/essentials/settings" horizontal>
+      Configure colors, logos, and site settings
+    </Card>
+  </Step>
+</Steps>
 
-Set up your AI coding tool to work seamlessly with Mintlify:
+## Key Features
 
-```bash
-npx skills add https://mintlify.com/docs
-```
+### Write with MDX
 
-This installs Mintlify's documentation skill for AI tools like Claude Code, Cursor, and Windsurf. The skill includes component reference, writing standards, and workflow guidance.
+Create engaging documentation with Markdown enhanced by React components. Add interactive elements, custom layouts, and dynamic content without leaving your MDX files.
+
+<CodeGroup>
+
+```mdx Example.mdx
+---
+title: "My Page"
+description: "A great page"
+---
+
+## Welcome
+
+Use **Markdown** and React components together.
 
 <Tip>
-  See the [AI tools guides](/ai-tools) for tool-specific setup instructions.
+  This is a tip component!
+</Tip>
+```
+
+```json docs.json
+{
+  "name": "My Docs",
+  "colors": {
+    "primary": "#16A34A",
+    "light": "#07C983",
+    "dark": "#15803D"
+  }
+}
+```
+
+</CodeGroup>
+
+### Interactive Components
+
+Mintlify provides dozens of built-in components to make your docs more engaging and easier to navigate.
+
+<AccordionGroup>
+  <Accordion title="Navigation Components" icon="compass">
+    - **Cards & CardGroups**: Highlight key features or links
+    - **Tabs**: Organize related content
+    - **Steps**: Guide users through processes
+    - **Accordions**: Collapse detailed information
+  </Accordion>
+
+  <Accordion title="Code Components" icon="code">
+    - **CodeGroup**: Show code in multiple languages
+    - **Code Blocks**: Syntax highlighting for 100+ languages
+    - **Inline Code**: Highlight code within text
+    - **API Playground**: Interactive API testing
+  </Accordion>
+
+  <Accordion title="Callout Components" icon="message">
+    - **Note**: General information
+    - **Tip**: Helpful suggestions
+    - **Warning**: Important cautions
+    - **Info**: Additional context
+  </Accordion>
+
+  <Accordion title="Media Components" icon="image">
+    - **Frame**: Styled image containers
+    - **Images**: Responsive image support
+    - **Videos**: Embed videos from any source
+    - **Icons**: Thousands of icons available
+  </Accordion>
+</AccordionGroup>
+
+### API Documentation
+
+Auto-generate beautiful API documentation from your OpenAPI (Swagger) specifications. Mintlify creates interactive API references with request/response examples, parameter descriptions, and an integrated API playground.
+
+<Card title="API Reference Example" icon="terminal" href="/api-reference/introduction">
+  See how to set up auto-generated API documentation
+</Card>
+
+## Customize Everything
+
+Make your documentation site match your brand perfectly with extensive customization options.
+
+<CardGroup cols={2}>
+  <Card title="Site Settings" icon="gear" href="/essentials/settings">
+    Configure your site name, colors, favicon, logo, and more in `docs.json`
+  </Card>
+  <Card title="Navigation Structure" icon="map" href="/essentials/navigation">
+    Organize pages into groups and tabs for intuitive browsing
+  </Card>
+  <Card title="Markdown Styling" icon="pen-fancy" href="/essentials/markdown">
+    Learn MDX syntax and Mintlify-specific formatting options
+  </Card>
+  <Card title="Code Blocks" icon="square-code" href="/essentials/code">
+    Add syntax-highlighted code with copy buttons and line numbers
+  </Card>
+</CardGroup>
+
+## Production-Ready Features
+
+<Tip>
+  Mintlify handles hosting, deployment, SSL, and CDN automatically. You just push to Git and your docs are live.
 </Tip>
 
-## Need inspiration?
+- **Automatic Deployments**: Push to GitHub and deploy instantly
+- **Global CDN**: Fast loading times worldwide
+- **SEO Optimized**: Built-in meta tags and sitemaps
+- **Analytics Ready**: Track pageviews and user behavior
+- **Search**: Powerful built-in search with keyboard shortcuts
+- **Dark Mode**: Automatic dark mode support
+- **Mobile Responsive**: Perfect on any device
+- **Version Control**: Git-based workflow for tracking changes
 
-<Card
-  title="See complete examples"
-  icon="stars"
-  href="https://mintlify.com/customers"
->
-  Browse our showcase of exceptional documentation sites built with Mintlify.
-</Card>
+## AI-Powered Workflows
+
+Supercharge your documentation workflow with AI coding assistants that understand Mintlify.
+
+<CardGroup cols={3}>
+  <Card title="Cursor" icon="square-cursor" href="/ai-tools/cursor">
+    AI-first code editor with Mintlify support
+  </Card>
+  <Card title="Claude Code" icon="message-bot" href="/ai-tools/claude-code">
+    Use Claude to generate and edit docs
+  </Card>
+  <Card title="Windsurf" icon="wind" href="/ai-tools/windsurf">
+    Collaborative AI development
+  </Card>
+</CardGroup>
+
+## Community & Support
+
+<CardGroup cols={2}>
+  <Card title="Official Documentation" icon="book-open" href="https://mintlify.com/docs">
+    Comprehensive guides and API references
+  </Card>
+  <Card title="Join Community" icon="users" href="https://mintlify.com/community">
+    Connect with other Mintlify users
+  </Card>
+  <Card title="Example Sites" icon="stars" href="https://mintlify.com/customers">
+    Browse showcase of exceptional docs sites
+  </Card>
+  <Card title="Get Support" icon="life-ring" href="mailto:hi@mintlify.com">
+    Email us for technical support
+  </Card>
+</CardGroup>
+
+<Warning>
+  **Ready to begin?** Head over to the [Quickstart guide](/quickstart) to set up your documentation site in the next 5 minutes.
+</Warning>

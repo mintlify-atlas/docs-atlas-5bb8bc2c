@@ -1,11 +1,16 @@
 ---
 title: 'Introduction'
-description: 'Complete API reference for the Plant Store API'
+description: 'Example section for showcasing API endpoints'
 ---
+
+<Note>
+  If you're not looking to build API reference documentation, you can delete
+  this section by removing the api-reference folder.
+</Note>
 
 ## Welcome
 
-The Plant Store API provides a RESTful interface for managing plant inventory. This documentation covers all available endpoints, authentication methods, and usage examples.
+There are two ways to build API documentation: [OpenAPI](https://mintlify.com/docs/api-playground/openapi/setup) and [MDX components](https://mintlify.com/docs/api-playground/mdx/configuration). For the starter kit, we are using the following OpenAPI specification.
 
 <Card
   title="Plant Store Endpoints"
@@ -15,29 +20,9 @@ The Plant Store API provides a RESTful interface for managing plant inventory. T
   View the OpenAPI specification file
 </Card>
 
-## Base URL
-
-All API requests should be made to:
-
-```
-http://sandbox.mintlify.com
-```
-
 ## Authentication
 
-All API endpoints require authentication using Bearer tokens. Include your API token in the Authorization header of each request:
-
-```bash
-Authorization: Bearer YOUR_API_TOKEN
-```
-
-<Warning>
-  Keep your API tokens secure and never share them in public repositories or client-side code.
-</Warning>
-
-### Security Configuration
-
-The API uses Bearer authentication as defined in the OpenAPI specification:
+All API endpoints are authenticated using Bearer tokens and picked up from the specification file.
 
 ```json
 "security": [
@@ -47,56 +32,129 @@ The API uses Bearer authentication as defined in the OpenAPI specification:
 ]
 ```
 
-## API Structure
+### Getting Your API Key
 
-The Plant Store API is organized around REST principles. It uses standard HTTP methods, accepts JSON request bodies, and returns JSON-encoded responses.
+<Steps>
+  <Step title="Sign in to your account">
+    Navigate to your dashboard and access the API settings page.
+  </Step>
+  <Step title="Generate a new token">
+    Click **Create API Key** and give it a descriptive name.
+  </Step>
+  <Step title="Store securely">
+    Copy your API key immediately - you won't be able to see it again.
+  </Step>
+</Steps>
 
-### Available Endpoints
+<Warning>
+  Never share your API key or commit it to version control. Always use environment variables to store sensitive credentials.
+</Warning>
+
+### Making Authenticated Requests
+
+Include your Bearer token in the Authorization header of every request:
+
+<CodeGroup>
+
+```bash cURL
+curl -X GET "http://sandbox.mintlify.com/plants" \
+  -H "Authorization: Bearer YOUR_API_KEY"
+```
+
+```javascript JavaScript
+const response = await fetch('http://sandbox.mintlify.com/plants', {
+  headers: {
+    'Authorization': 'Bearer YOUR_API_KEY'
+  }
+});
+```
+
+```python Python
+import requests
+
+headers = {
+    'Authorization': 'Bearer YOUR_API_KEY'
+}
+response = requests.get('http://sandbox.mintlify.com/plants', headers=headers)
+```
+
+</CodeGroup>
+
+## Base URL
+
+All API requests should be made to:
+
+```
+http://sandbox.mintlify.com
+```
+
+<Tip>
+  For production environments, use `https://api.mintlify.com` instead of the sandbox URL.
+</Tip>
+
+## API Endpoints
+
+Explore our API endpoints to manage your plant store:
 
 <CardGroup cols={2}>
   <Card title="Get Plants" icon="list" href="/api-reference/endpoint/get">
-    Retrieve all plants from the store
+    Retrieve all plants from your store
   </Card>
   <Card title="Create Plant" icon="plus" href="/api-reference/endpoint/create">
-    Add a new plant to the inventory
+    Add a new plant to your store
   </Card>
   <Card title="Delete Plant" icon="trash" href="/api-reference/endpoint/delete">
-    Remove a plant from the store
+    Remove a plant from your store
   </Card>
-  <Card title="Webhook" icon="webhook" href="/api-reference/endpoint/webhook">
-    Receive notifications for new plants
+  <Card title="Webhooks" icon="webhook" href="/api-reference/endpoint/webhook">
+    Receive notifications about new plants
   </Card>
 </CardGroup>
 
-## Response Format
+## Rate Limiting
 
-All responses are returned in JSON format with appropriate HTTP status codes:
+The API implements rate limiting to ensure fair usage:
 
-- `200` - Successful request
-- `204` - Successful request with no content
-- `400` - Bad request or unexpected error
-- `401` - Unauthorized (invalid or missing token)
-- `404` - Resource not found
+- **Rate limit**: 100 requests per minute per API key
+- **Burst limit**: 20 requests per second
 
-### Error Handling
+When you exceed the rate limit, you'll receive a `429 Too Many Requests` response.
 
-When an error occurs, the API returns a JSON object with error details:
+<Expandable title="Rate Limit Headers">
+  Each API response includes headers that help you track your rate limit status:
+
+  - `X-RateLimit-Limit`: Maximum number of requests per minute
+  - `X-RateLimit-Remaining`: Number of requests remaining in the current window
+  - `X-RateLimit-Reset`: Unix timestamp when the rate limit resets
+</Expandable>
+
+## Error Handling
+
+The API uses standard HTTP response codes to indicate success or failure:
+
+| Status Code | Description |
+|------------|-------------|
+| `200` | Successful request |
+| `204` | Successful request with no content |
+| `400` | Bad request - check your parameters |
+| `401` | Unauthorized - check your API key |
+| `404` | Resource not found |
+| `429` | Too many requests - you've hit the rate limit |
+| `500` | Server error - try again later |
+
+All error responses include a JSON body with details:
 
 ```json
 {
   "error": 400,
-  "message": "Descriptive error message"
+  "message": "Invalid parameter: limit must be a positive integer"
 }
 ```
 
+## OpenAPI Integration
+
+This API documentation is automatically generated from our OpenAPI specification. The specification defines all endpoints, parameters, request bodies, and responses in a machine-readable format.
+
 <Tip>
-  Always check the HTTP status code and handle errors appropriately in your application.
+  You can download the OpenAPI specification and use it with tools like Postman, Insomnia, or to generate client libraries in your preferred programming language.
 </Tip>
-
-## Rate Limiting
-
-To ensure fair usage and API stability, rate limits apply to all endpoints. Contact support if you need higher limits for production use.
-
-## Support
-
-For API support, questions, or feature requests, please contact our development team or consult the full OpenAPI specification linked above.

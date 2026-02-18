@@ -1,110 +1,231 @@
 ---
 title: 'Code blocks'
-description: 'Display inline code and code blocks with syntax highlighting'
+description: 'Display beautiful syntax-highlighted code examples in your documentation'
 ---
-
-Mintlify provides powerful syntax highlighting for code blocks and supports inline code snippets.
 
 ## Inline code
 
-To denote a `word` or `phrase` as code, enclose it in backticks (`).
+Wrap text in backticks to display it as inline code. Perfect for referencing variables, functions, or file names within sentences.
 
-```md
-To denote a `word` or `phrase` as code, enclose it in backticks (`).
-```
+<Tabs>
+  <Tab title="Example">
+    Use the `useState` hook to manage state in React components.
+  </Tab>
+  <Tab title="Markdown">
+    ```md
+    Use the `useState` hook to manage state in React components.
+    ```
+  </Tab>
+</Tabs>
 
-Use inline code for:
-- Function names like `useState()` or `fetchData()`
-- Variable names like `userName` or `API_KEY`
-- File names like `config.json` or `app.tsx`
-- Short commands like `npm install` or `git push`
+<Tip>
+Use inline code for: variable names (`userName`), function calls (`fetchData()`), file paths (`src/index.js`), and terminal commands (`npm install`).
+</Tip>
 
-## Code blocks
+## Basic code blocks
 
-Use [fenced code blocks](https://www.markdownguide.org/extended-syntax/#fenced-code-blocks) by enclosing code in three backticks and follow the leading ticks with the programming language of your snippet to get syntax highlighting. Optionally, you can also write the name of your code after the programming language.
+Create fenced code blocks using triple backticks with a language identifier for automatic syntax highlighting.
 
-```java HelloWorld.java
-class HelloWorld {
-    public static void main(String[] args) {
-        System.out.println("Hello, World!");
-    }
-}
-```
+<Steps>
+  <Step title="Start with three backticks and language">
+    ```javascript
+    ```
+  </Step>
+  
+  <Step title="Add your code">
+    ```javascript
+    const greeting = "Hello, world!";
+    console.log(greeting);
+    ```
+  </Step>
+  
+  <Step title="Close with three backticks">
+    Complete the block with three closing backticks.
+  </Step>
+</Steps>
+
+## Adding file names
+
+Include file names after the language tag to provide context:
 
 ````md
-```java HelloWorld.java
-class HelloWorld {
-    public static void main(String[] args) {
-        System.out.println("Hello, World!");
-    }
+```javascript HelloWorld.js
+function HelloWorld() {
+  return <h1>Hello, World!</h1>;
+}
+````
+
+**Result:**
+
+```javascript HelloWorld.js
+function HelloWorld() {
+  return <h1>Hello, World!</h1>;
 }
 ```
-````
+
+<Note>
+File names appear above the code block, helping users understand where the code belongs in their project structure.
+</Note>
 
 ## Supported languages
 
-Mintlify supports syntax highlighting for all major programming languages:
+Mintlify supports syntax highlighting for 100+ programming languages:
 
-<Accordion title="JavaScript/TypeScript">
-```javascript
-const greeting = (name) => {
-  return `Hello, ${name}!`;
-};
+<AccordionGroup>
+  <Accordion icon="code" title="Popular languages">
+    - **JavaScript/TypeScript**: `javascript`, `typescript`, `jsx`, `tsx`
+    - **Python**: `python`, `py`
+    - **Java**: `java`
+    - **C/C++**: `c`, `cpp`, `c++`
+    - **C#**: `csharp`, `cs`
+    - **Ruby**: `ruby`, `rb`
+    - **Go**: `go`, `golang`
+    - **Rust**: `rust`, `rs`
+    - **PHP**: `php`
+    - **Swift**: `swift`
+    - **Kotlin**: `kotlin`, `kt`
+  </Accordion>
+  
+  <Accordion icon="globe" title="Web technologies">
+    - **HTML**: `html`
+    - **CSS**: `css`, `scss`, `sass`, `less`
+    - **JSON**: `json`
+    - **XML**: `xml`
+    - **YAML**: `yaml`, `yml`
+    - **Markdown**: `markdown`, `md`, `mdx`
+    - **GraphQL**: `graphql`, `gql`
+  </Accordion>
+  
+  <Accordion icon="terminal" title="Shell and config">
+    - **Bash/Shell**: `bash`, `shell`, `sh`
+    - **PowerShell**: `powershell`, `ps1`
+    - **SQL**: `sql`
+    - **Docker**: `dockerfile`
+    - **TOML**: `toml`
+    - **INI**: `ini`
+  </Accordion>
+</AccordionGroup>
 
-console.log(greeting('World'));
-```
-</Accordion>
+## CodeGroup component
 
-<Accordion title="Python">
-```python
-def fibonacci(n):
-    if n <= 1:
-        return n
-    return fibonacci(n-1) + fibonacci(n-2)
-
-print(fibonacci(10))
-```
-</Accordion>
-
-<Accordion title="Go">
-```go
-package main
-
-import "fmt"
-
-func main() {
-    fmt.Println("Hello, World!")
-}
-```
-</Accordion>
-
-<Accordion title="Rust">
-```rust
-fn main() {
-    let numbers = vec![1, 2, 3, 4, 5];
-    let sum: i32 = numbers.iter().sum();
-    println!("Sum: {}", sum);
-}
-```
-</Accordion>
-
-## CodeGroup
-
-Use CodeGroup to display multiple code examples in tabs. This is perfect for showing the same operation in different languages or frameworks:
+Display multiple code examples side-by-side using tabs. Perfect for showing the same operation in different languages or frameworks.
 
 <CodeGroup>
 
-```javascript Node.js
-const response = await fetch('https://api.example.com/data', {
+```javascript JavaScript
+const response = await fetch('https://api.example.com/data');
+const data = await response.json();
+console.log(data);
+```
+
+```python Python
+import requests
+
+response = requests.get('https://api.example.com/data')
+data = response.json()
+print(data)
+```
+
+```ruby Ruby
+require 'net/http'
+require 'json'
+
+uri = URI('https://api.example.com/data')
+response = Net::HTTP.get(uri)
+data = JSON.parse(response)
+puts data
+```
+
+```go Go
+package main
+
+import (
+    "encoding/json"
+    "fmt"
+    "net/http"
+)
+
+func main() {
+    resp, _ := http.Get("https://api.example.com/data")
+    var data map[string]interface{}
+    json.NewDecoder(resp.Body).Decode(&data)
+    fmt.Println(data)
+}
+```
+
+</CodeGroup>
+
+**How to create:**
+
+````mdx
+<CodeGroup>
+
+```javascript JavaScript
+// Your JavaScript code
+```
+
+```python Python
+# Your Python code
+```
+
+</CodeGroup>
+````
+
+<Tip>
+Use `CodeGroup` when documenting SDKs, APIs, or multi-language frameworks to help developers find code in their preferred language quickly.
+</Tip>
+
+## Advanced examples
+
+### Configuration files
+
+Show complete configuration examples:
+
+```json package.json
+{
+  "name": "my-project",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start"
+  },
+  "dependencies": {
+    "next": "^14.0.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  }
+}
+```
+
+### API endpoints
+
+Document REST API calls with clear examples:
+
+<CodeGroup>
+
+```bash cURL
+curl -X POST https://api.example.com/users \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer YOUR_TOKEN" \
+  -d '{
+    "name": "Jane Doe",
+    "email": "jane@example.com"
+  }'
+```
+
+```javascript JavaScript
+const response = await fetch('https://api.example.com/users', {
   method: 'POST',
   headers: {
     'Content-Type': 'application/json',
-    'Authorization': `Bearer ${token}`
+    'Authorization': 'Bearer YOUR_TOKEN'
   },
-  body: JSON.stringify({ key: 'value' })
+  body: JSON.stringify({
+    name: 'Jane Doe',
+    email: 'jane@example.com'
+  })
 });
-
-const data = await response.json();
 ```
 
 ```python Python
@@ -112,80 +233,26 @@ import requests
 
 headers = {
     'Content-Type': 'application/json',
-    'Authorization': f'Bearer {token}'
+    'Authorization': 'Bearer YOUR_TOKEN'
+}
+
+data = {
+    'name': 'Jane Doe',
+    'email': 'jane@example.com'
 }
 
 response = requests.post(
-    'https://api.example.com/data',
+    'https://api.example.com/users',
     headers=headers,
-    json={'key': 'value'}
+    json=data
 )
-
-data = response.json()
-```
-
-```bash cURL
-curl -X POST https://api.example.com/data \
-  -H "Content-Type: application/json" \
-  -H "Authorization: Bearer $TOKEN" \
-  -d '{"key": "value"}'
 ```
 
 </CodeGroup>
 
-Here's how to create a CodeGroup:
+### Terminal commands
 
-````md
-<CodeGroup>
-
-```javascript Node.js
-// Your Node.js code
-```
-
-```python Python
-# Your Python code
-```
-
-```bash cURL
-# Your cURL command
-```
-
-</CodeGroup>
-````
-
-<Tip>
-CodeGroup automatically detects the language from the code fence and creates a tab for each code block. The text after the language name becomes the tab label.
-</Tip>
-
-## File names and line highlighting
-
-Add a file name after the language to display it above your code block:
-
-```typescript users.service.ts
-export class UsersService {
-  async findUser(id: string) {
-    return await this.db.user.findUnique({
-      where: { id }
-    });
-  }
-}
-```
-
-````md
-```typescript users.service.ts
-export class UsersService {
-  async findUser(id: string) {
-    return await this.db.user.findUnique({
-      where: { id }
-    });
-  }
-}
-```
-````
-
-## Shell commands
-
-For terminal commands and shell scripts, use `bash`, `sh`, or `shell`:
+Show command-line operations clearly:
 
 ```bash
 # Install dependencies
@@ -198,64 +265,138 @@ npm run dev
 npm run build
 ```
 
-## Configuration files
+## Best practices
 
-Use appropriate syntax highlighting for configuration files:
+<CardGroup cols={2}>
+
+<Card title="Always specify language" icon="language">
+Include the language tag for proper syntax highlighting
+</Card>
+
+<Card title="Add file names" icon="file-code">
+Help users understand where code belongs
+</Card>
+
+<Card title="Keep examples focused" icon="bullseye">
+Show one concept per code block
+</Card>
+
+<Card title="Use CodeGroup wisely" icon="layer-group">
+Perfect for multi-language SDKs and frameworks
+</Card>
+
+</CardGroup>
+
+## Real-world example
+
+Here's a complete example showing how to implement authentication:
 
 <Tabs>
-  <Tab title="JSON">
-    ```json package.json
-    {
-      "name": "my-app",
-      "version": "1.0.0",
-      "scripts": {
-        "dev": "next dev",
-        "build": "next build"
+  <Tab title="Setup">
+    First, install the required packages:
+    
+    ```bash
+    npm install jsonwebtoken bcrypt
+    ```
+  </Tab>
+  
+  <Tab title="Implementation">
+    <CodeGroup>
+    
+    ```javascript auth.js
+    const jwt = require('jsonwebtoken');
+    const bcrypt = require('bcrypt');
+    
+    async function login(email, password) {
+      // Find user in database
+      const user = await db.users.findOne({ email });
+      
+      // Verify password
+      const isValid = await bcrypt.compare(password, user.passwordHash);
+      
+      if (!isValid) {
+        throw new Error('Invalid credentials');
       }
+      
+      // Generate token
+      const token = jwt.sign(
+        { userId: user.id },
+        process.env.JWT_SECRET,
+        { expiresIn: '7d' }
+      );
+      
+      return token;
     }
     ```
-  </Tab>
-  <Tab title="YAML">
-    ```yaml .github/workflows/deploy.yml
-    name: Deploy
-    on:
-      push:
-        branches: [main]
-    jobs:
-      deploy:
-        runs-on: ubuntu-latest
-        steps:
-          - uses: actions/checkout@v2
-          - run: npm install
-          - run: npm run build
+    
+    ```typescript auth.ts
+    import jwt from 'jsonwebtoken';
+    import bcrypt from 'bcrypt';
+    
+    interface User {
+      id: string;
+      email: string;
+      passwordHash: string;
+    }
+    
+    async function login(email: string, password: string): Promise<string> {
+      // Find user in database
+      const user = await db.users.findOne({ email }) as User;
+      
+      // Verify password
+      const isValid = await bcrypt.compare(password, user.passwordHash);
+      
+      if (!isValid) {
+        throw new Error('Invalid credentials');
+      }
+      
+      // Generate token
+      const token = jwt.sign(
+        { userId: user.id },
+        process.env.JWT_SECRET!,
+        { expiresIn: '7d' }
+      );
+      
+      return token;
+    }
     ```
+    
+    </CodeGroup>
   </Tab>
-  <Tab title="TOML">
-    ```toml Cargo.toml
-    [package]
-    name = "my-app"
-    version = "0.1.0"
-    edition = "2021"
-
-    [dependencies]
-    tokio = { version = "1", features = ["full"] }
+  
+  <Tab title="Usage">
+    Use the authentication function in your API routes:
+    
+    ```javascript
+    app.post('/api/login', async (req, res) => {
+      try {
+        const { email, password } = req.body;
+        const token = await login(email, password);
+        res.json({ token });
+      } catch (error) {
+        res.status(401).json({ error: error.message });
+      }
+    });
     ```
   </Tab>
 </Tabs>
 
-## Best practices
+<Warning>
+Never commit sensitive data like API keys or passwords in code examples. Use environment variables or placeholders like `YOUR_TOKEN`.
+</Warning>
 
-<CardGroup cols={2}>
-  <Card title="Keep it concise" icon="scissors">
-    Show only the relevant code. Remove boilerplate and focus on what matters.
-  </Card>
-  <Card title="Add context" icon="comment">
-    Include comments to explain complex logic or important details.
-  </Card>
-  <Card title="Use file names" icon="file">
-    Help users understand where code should live by adding file names.
-  </Card>
-  <Card title="Group related examples" icon="layer-group">
-    Use CodeGroup to show the same concept in multiple languages.
-  </Card>
-</CardGroup>
+## Next steps
+
+<AccordionGroup>
+  <Accordion icon="image" title="Add images and media">
+    Learn how to include screenshots, diagrams, and videos in the [images guide](/essentials/images).
+  </Accordion>
+  
+  <Accordion icon="recycle" title="Reuse code snippets">
+    Keep code examples in sync across pages with [reusable snippets](/essentials/reusable-snippets).
+  </Accordion>
+  
+  <Accordion icon="book" title="Explore MDX syntax">
+    Master all Markdown features in the [MDX guide](/essentials/markdown).
+  </Accordion>
+</AccordionGroup>

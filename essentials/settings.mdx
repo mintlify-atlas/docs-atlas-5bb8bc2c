@@ -1,109 +1,105 @@
 ---
 title: 'Global Settings'
-description: 'Configure your documentation site with docs.json to control branding, colors, navigation, and API settings'
+description: 'Configure your documentation site appearance, branding, and behavior using docs.json'
 ---
 
-Every Mintlify site needs a `docs.json` file with the core configuration settings. This file controls your site's branding, theme colors, navigation structure, API playground, and more.
+Every Mintlify site requires a `docs.json` file that controls your documentation's look, feel, and functionality. This configuration file is the central hub for customizing your site's theme, colors, branding, navigation, and more.
 
-## Basic Configuration
+<Note>
+The `docs.json` file should be placed in the root directory of your documentation project. Changes to this file require restarting your dev server.
+</Note>
 
-Start with these essential properties to get your documentation site up and running.
+## Core Configuration
 
-<AccordionGroup>
-  <Accordion title="name - Project name" icon="tag">
-    The name of your project. This appears as the global title across your documentation.
+### Project Name and Theme
 
-    ```json
-    {
-      "name": "Mint Starter Kit"
-    }
-    ```
-  </Accordion>
+The most basic configuration includes your project name and theme selection:
 
-  <Accordion title="logo - Brand logo" icon="image">
-    Path to your logo image. You can use a single logo or provide separate logos for light and dark modes.
+```json docs.json
+{
+  "name": "Mint Starter Kit",
+  "theme": "mint"
+}
+```
 
-    <Tabs>
-      <Tab title="Separate logos">
-        ```json
-        {
-          "logo": {
-            "light": "/logo/light.svg",
-            "dark": "/logo/dark.svg",
-            "href": "/"
-          }
-        }
-        ```
-      </Tab>
-      <Tab title="Single logo">
-        ```json
-        {
-          "logo": "/logo.svg"
-        }
-        ```
-      </Tab>
-    </Tabs>
+The `name` property sets your project's global title, appearing in the browser tab and throughout your documentation.
 
-    <Note>The `href` property controls where clicking the logo takes users. Defaults to `/` if not specified.</Note>
-  </Accordion>
+## Branding and Visual Identity
 
-  <Accordion title="favicon - Site icon" icon="browser">
-    Path to the favicon that appears in browser tabs.
+<Accordion title="Colors and Theme Customization">
 
-    ```json
-    {
-      "favicon": "/favicon.svg"
-    }
-    ```
-  </Accordion>
-</AccordionGroup>
+Customize your documentation's color scheme using the `colors` object. Mintlify supports different colors for light and dark modes:
 
-## Theme Colors
-
-Customize your documentation's color scheme to match your brand. All colors use hex codes.
-
-```json
+```json docs.json
 {
   "colors": {
     "primary": "#16A34A",
     "light": "#07C983",
     "dark": "#15803D",
     "background": {
-      "light": "#FFFFFF",
-      "dark": "#0A0A0A"
+      "light": "#ffffff",
+      "dark": "#0f172a"
     }
   }
 }
 ```
 
-<Tip>The `primary` color is used for highlighted content, section headers, and accents in light mode. The `light` property sets the primary color for dark mode.</Tip>
+**Color Properties:**
+- `primary` - Main accent color for highlighted content, section headers, and links in light mode
+- `light` - Primary color for dark mode UI elements
+- `dark` - Color for important buttons and CTAs
+- `background` - Custom background colors for both modes (optional)
 
-### Color Properties
+<Tip>
+Use colors that match your brand identity and ensure sufficient contrast for readability in both light and dark modes.
+</Tip>
 
-- **primary** - Main accent color for light mode (used for links, highlights, and UI accents)
-- **light** - Primary accent color for dark mode
-- **dark** - Color for important buttons and CTAs
-- **background** - Custom background colors for both light and dark modes
+</Accordion>
 
-## Navigation Bar
+<Accordion title="Logo Configuration">
 
-Add links and call-to-action buttons to your top navigation bar.
+Configure your logo to support both light and dark themes:
 
-<CodeGroup>
-```json Navbar with links
+```json docs.json
 {
-  "navbar": {
-    "links": [
-      {
-        "label": "Support",
-        "href": "mailto:hi@mintlify.com"
-      }
-    ]
+  "logo": {
+    "light": "/logo/light.svg",
+    "dark": "/logo/dark.svg",
+    "href": "/"
   }
 }
 ```
 
-```json Navbar with CTA button
+**Logo Options:**
+- Use a single string path for one logo: `"logo": "/logo.svg"`
+- Use an object with `light` and `dark` properties for theme-specific logos
+- Add `href` to customize where clicking the logo navigates (defaults to `/`)
+
+Place your logo files in the `public` folder of your documentation project.
+
+</Accordion>
+
+<Accordion title="Favicon">
+
+Set your site's favicon using a relative path:
+
+```json docs.json
+{
+  "favicon": "/favicon.svg"
+}
+```
+
+Supported formats include `.svg`, `.png`, and `.ico`. SVG files are recommended for better scalability.
+
+</Accordion>
+
+## Navigation Bar
+
+### Top Navigation Links
+
+Add links to your navigation bar using the `navbar` configuration:
+
+```json docs.json
 {
   "navbar": {
     "links": [
@@ -121,25 +117,44 @@ Add links and call-to-action buttons to your top navigation bar.
 }
 ```
 
-```json GitHub integration
+**Navbar Structure:**
+- `links` - Array of secondary navigation links (appear as text links)
+- `primary` - Call-to-action button with prominent styling
+
+### Global Anchors
+
+Create quick access links that appear in your navigation sidebar:
+
+```json docs.json
 {
-  "navbar": {
-    "primary": {
-      "type": "github",
-      "href": "https://github.com/mintlify/starter"
+  "navigation": {
+    "global": {
+      "anchors": [
+        {
+          "anchor": "Documentation",
+          "href": "https://mintlify.com/docs",
+          "icon": "book-open-cover"
+        },
+        {
+          "anchor": "Blog",
+          "href": "https://mintlify.com/blog",
+          "icon": "newspaper"
+        }
+      ]
     }
   }
 }
 ```
-</CodeGroup>
 
-<Note>When using `type: "github"`, Mintlify automatically displays your repository information including GitHub stars.</Note>
+Anchors support Font Awesome icons and can link to both internal pages and external URLs.
 
 ## Footer Configuration
 
-Add social media links to your documentation footer.
+### Social Media Links
 
-```json
+Add social media links to your footer:
+
+```json docs.json
 {
   "footer": {
     "socials": {
@@ -151,131 +166,33 @@ Add social media links to your documentation footer.
 }
 ```
 
-**Supported platforms:** `website`, `facebook`, `x`, `discord`, `slack`, `github`, `linkedin`, `instagram`, `hacker-news`
+**Supported Platforms:**
+- `website` - Your main website
+- `x` - X (Twitter)
+- `github` - GitHub
+- `linkedin` - LinkedIn
+- `discord` - Discord
+- `slack` - Slack
+- `facebook` - Facebook
+- `instagram` - Instagram
+- `hacker-news` - Hacker News
 
-## API Configuration
+## Advanced Features
 
-Configure API playground settings and authentication for your API reference pages.
+<Accordion title="Dark Mode Toggle">
 
-<AccordionGroup>
-  <Accordion title="Base URL" icon="link">
-    Set the base URL for all API endpoints. You can provide multiple base URLs for different environments.
-
-    ```json
-    {
-      "api": {
-        "baseUrl": "https://api.example.com"
-      }
-    }
-    ```
-
-    <Tip>For multiple environments, use an array: `"baseUrl": ["https://api.example.com", "https://api-staging.example.com"]`</Tip>
-  </Accordion>
-
-  <Accordion title="Authentication" icon="key">
-    Configure the authentication method for your API playground.
-
-    <Tabs>
-      <Tab title="Bearer token">
-        ```json
-        {
-          "api": {
-            "auth": {
-              "method": "bearer",
-              "name": "Authorization",
-              "inputPrefix": "Bearer"
-            }
-          }
-        }
-        ```
-      </Tab>
-      <Tab title="API key">
-        ```json
-        {
-          "api": {
-            "auth": {
-              "method": "key",
-              "name": "api_key"
-            }
-          }
-        }
-        ```
-      </Tab>
-      <Tab title="Basic auth">
-        ```json
-        {
-          "api": {
-            "auth": {
-              "method": "basic",
-              "name": "username:password"
-            }
-          }
-        }
-        ```
-      </Tab>
-    </Tabs>
-  </Accordion>
-
-  <Accordion title="Playground mode" icon="play">
-    Control how the API playground displays on your pages.
-
-    ```json
-    {
-      "api": {
-        "playground": {
-          "mode": "show"
-        }
-      }
-    }
-    ```
-
-    **Available modes:**
-    - `show` - Full interactive playground (default)
-    - `simple` - Display endpoint only, no interactivity
-    - `hide` - Hide the playground completely
-  </Accordion>
-
-  <Accordion title="OpenAPI specification" icon="file-code">
-    Point to your OpenAPI specification file(s) to automatically generate API documentation.
-
-    <CodeGroup>
-    ```json Single spec
-    {
-      "openapi": "https://example.com/openapi.json"
-    }
-    ```
-
-    ```json Local file
-    {
-      "openapi": "/openapi.json"
-    }
-    ```
-
-    ```json Multiple specs
-    {
-      "openapi": [
-        "https://example.com/openapi1.json",
-        "/openapi2.json",
-        "/openapi3.json"
-      ]
-    }
-    ```
-    </CodeGroup>
-  </Accordion>
-</AccordionGroup>
-
-## Mode Toggle
-
-Customize the dark mode toggle behavior for your documentation.
+Customize or disable the dark mode toggle:
 
 <CodeGroup>
-```json Auto (system default)
+```json Default Behavior
 {
-  "modeToggle": {}
+  "modeToggle": {
+    "default": "dark"
+  }
 }
 ```
 
-```json Force dark mode
+```json Hide Toggle (Force Dark Mode)
 {
   "modeToggle": {
     "default": "dark",
@@ -284,7 +201,7 @@ Customize the dark mode toggle behavior for your documentation.
 }
 ```
 
-```json Force light mode
+```json Hide Toggle (Force Light Mode)
 {
   "modeToggle": {
     "default": "light",
@@ -292,23 +209,42 @@ Customize the dark mode toggle behavior for your documentation.
   }
 }
 ```
+</CodeGroup>
 
-```json Default to dark
+When not set, Mintlify defaults to the user's operating system preference.
+
+</Accordion>
+
+<Accordion title="Contextual Actions">
+
+Enable contextual actions that appear when users select text:
+
+```json docs.json
 {
-  "modeToggle": {
-    "default": "dark"
+  "contextual": {
+    "options": [
+      "copy",
+      "view",
+      "chatgpt",
+      "claude",
+      "perplexity",
+      "mcp",
+      "cursor",
+      "vscode"
+    ]
   }
 }
 ```
-</CodeGroup>
 
-<Warning>Setting `isHidden: true` removes the dark/light mode toggle from your documentation. Users won't be able to change modes.</Warning>
+These actions allow users to copy text, open it in various AI tools, or their code editor.
 
-## Feedback Buttons
+</Accordion>
 
-Enable feedback buttons to let users suggest edits or raise issues about your documentation.
+<Accordion title="Feedback Buttons">
 
-```json
+Enable user feedback options:
+
+```json docs.json
 {
   "feedback": {
     "suggestEdit": true,
@@ -317,52 +253,84 @@ Enable feedback buttons to let users suggest edits or raise issues about your do
 }
 ```
 
-- **suggestEdit** - Adds a button that lets users suggest edits via pull requests
-- **raiseIssue** - Adds a button that lets users raise issues on GitHub
+- `suggestEdit` - Adds a button for users to suggest edits via pull requests
+- `raiseIssue` - Adds a button to raise issues about the documentation
 
-## Versions
+</Accordion>
 
-Show different versions of your documentation with a dropdown in the navigation bar.
+<Accordion title="API Configuration">
 
-```json
+Configure API documentation settings:
+
+```json docs.json
+{
+  "api": {
+    "baseUrl": "https://api.example.com",
+    "auth": {
+      "method": "bearer",
+      "name": "Authorization"
+    },
+    "playground": {
+      "mode": "show"
+    }
+  },
+  "openapi": "https://example.com/openapi.json"
+}
+```
+
+**API Options:**
+- `baseUrl` - Base URL for all API endpoints (can be an array for multiple options)
+- `auth` - Authentication configuration (bearer, basic, or key)
+- `playground.mode` - Controls API playground visibility (`show`, `simple`, or `hide`)
+- `openapi` - Path or URL to your OpenAPI specification file
+
+</Accordion>
+
+## Versioning
+
+Enable version selection for your documentation:
+
+```json docs.json
 {
   "versions": ["v2.0", "v1.0"]
 }
 ```
 
-<Note>This creates a version picker that lets users switch between different documentation versions.</Note>
+<Warning>
+Version management requires additional setup beyond just adding the `versions` array. Each version needs its own set of documentation files.
+</Warning>
 
 ## Background Image
 
-Add a custom background image that displays behind every page.
+Add a custom background image to all pages:
 
-```json
+```json docs.json
 {
-  "backgroundImage": "/background.png"
+  "backgroundImage": "/images/background.png"
 }
 ```
 
-<Tip>Check out examples at [Infisical](https://infisical.com/docs) and [FRPC](https://frpc.io) to see background images in action.</Tip>
+The background image appears behind your content on every page. Keep images subtle to maintain readability.
 
 ## Complete Example
 
-Here's a complete `docs.json` configuration using settings from the Mint Starter Kit:
+Here's a complete `docs.json` configuration combining multiple features:
 
-```json
+```json docs.json
 {
   "$schema": "https://mintlify.com/docs.json",
-  "theme": "mint",
   "name": "Mint Starter Kit",
+  "theme": "mint",
   "colors": {
     "primary": "#16A34A",
     "light": "#07C983",
     "dark": "#15803D"
   },
-  "favicon": "/favicon.svg",
   "logo": {
     "light": "/logo/light.svg",
     "dark": "/logo/dark.svg"
   },
+  "favicon": "/favicon.svg",
   "navbar": {
     "links": [
       {
@@ -382,6 +350,23 @@ Here's a complete `docs.json` configuration using settings from the Mint Starter
       "github": "https://github.com/mintlify",
       "linkedin": "https://linkedin.com/company/mintlify"
     }
+  },
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "Guides",
+        "groups": [
+          {
+            "group": "Getting started",
+            "pages": ["index", "quickstart"]
+          }
+        ]
+      }
+    ]
   }
 }
 ```
+
+<Tip>
+Use the `$schema` property to enable autocomplete and validation in your code editor.
+</Tip>
