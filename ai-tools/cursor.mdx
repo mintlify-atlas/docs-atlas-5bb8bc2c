@@ -1,197 +1,39 @@
 ---
-title: "Cursor Setup"
-description: "Configure Cursor AI to accelerate your Mintlify documentation workflow with intelligent assistance"
+title: "Cursor setup"
+description: "Configure Cursor for your documentation workflow"
+icon: "arrow-pointer"
 ---
 
-Cursor is an AI-powered code editor built on VS Code that helps you write and maintain documentation faster. With the Mintlify skill installed, Cursor understands your documentation structure and can help you create consistent, high-quality content.
+Set up Cursor to help you write and maintain your Mintlify documentation.
 
 ## Prerequisites
 
-Before getting started, ensure you have:
+- Cursor editor installed
 
-- **Cursor editor** installed ([download here](https://cursor.sh))
-- A Mintlify documentation project
-- Basic familiarity with MDX format
-
-## Installation and Setup
+## Setup
 
 <Steps>
-<Step title="Open your documentation project">
-  Launch Cursor and open the root directory of your documentation repository where `mint.json` is located.
-  
-  ```bash
-  cursor /path/to/your/docs
-  ```
+<Step title="Open your docs directory in Cursor">
+  Open the root of your documentation repository where `docs.json` is located.
 </Step>
 
 <Step title="Install the Mintlify skill">
-  Open the integrated terminal in Cursor (`` Ctrl+` `` or `` Cmd+` ``) and run:
+  In the integrated terminal, run:
 
   ```bash
   npx skills add https://mintlify.com/docs
   ```
 
-  This command installs the Mintlify skill, which provides Cursor with:
-  - Complete component reference for all Mintlify components
-  - Documentation writing standards and best practices
-  - Workflow guidance for common documentation tasks
-  - Context about MDX syntax and frontmatter requirements
+  This gives Cursor Mintlify's component reference, writing standards,
+  and workflow guidance.
 </Step>
 
 <Step title="Customize project instructions">
-  Create or edit `AGENTS.md` in your project root to add project-specific context:
-
-  ```markdown
-  # Documentation Project Instructions
-
-  ## Product Terminology
-  - Use "workspace" instead of "project"
-  - Use "integration" instead of "plugin"
-
-  ## Style Guidelines
-  - Use sentence case for all headings
-  - Keep code examples under 20 lines
-  - Always include descriptions in frontmatter
-
-  ## Content Scope
-  - Document public API endpoints only
-  - Exclude internal admin features
-  ```
-
-  <Tip>
-  The `AGENTS.md` file helps Cursor maintain consistency across your documentation by understanding your project's specific conventions.
-  </Tip>
+  Edit `AGENTS.md` in your project root to add project-specific terminology,
+  style preferences, and content boundaries.
 </Step>
 
-<Step title="Configure Cursor settings (optional)">
-  Enhance your experience by adjusting Cursor's AI settings:
-  
-  - Press `Cmd+Shift+P` (or `Ctrl+Shift+P` on Windows/Linux)
-  - Search for "Cursor Settings"
-  - Enable "AI Code Completion" for inline suggestions
-  - Set your preferred AI model (GPT-4 or Claude recommended)
+<Step title="Start writing with Cursor">
+  Open a file and use Cursor's AI features to draft and edit documentation.
 </Step>
 </Steps>
-
-## Using Cursor for Documentation
-
-### Writing New Pages
-
-<Accordion title="Creating a new documentation page">
-1. Create a new `.mdx` file in your desired directory
-2. Use `Cmd+K` to open Cursor's AI chat
-3. Prompt: "Create a documentation page about [topic] with frontmatter, overview, and setup steps"
-4. Review and refine the generated content
-
-Example prompt:
-```
-Create a comprehensive guide for setting up webhooks. Include:
-- YAML frontmatter with title and description
-- Overview section
-- Prerequisites
-- Step-by-step setup instructions using <Steps>
-- Configuration examples in a <CodeGroup>
-- Common troubleshooting tips in an <Accordion>
-```
-</Accordion>
-
-### Editing Existing Content
-
-<CodeGroup>
-```bash Inline Edit
-# Select text and press Cmd+K
-# Then describe your change:
-"Make this more concise"
-"Add a code example showing authentication"
-"Rewrite this in active voice"
-```
-
-```bash Chat Assistant
-# Open Cursor chat with Cmd+L
-# Reference specific files:
-"Review api/authentication.mdx for clarity"
-"Add error handling examples to this page"
-"Check if all code blocks have language tags"
-```
-</CodeGroup>
-
-### Smart Code Completion
-
-Cursor provides intelligent autocomplete for Mintlify components:
-
-<Tip>
-Start typing `<Steps>` or `<Note>` and Cursor will suggest the complete component structure with proper closing tags.
-</Tip>
-
-## Pro Tips
-
-<Note>
-**Use Cursor's Composer Mode** (Cmd+Shift+I) to make changes across multiple files simultaneously. Great for updating terminology or restructuring navigation.
-</Note>
-
-<Accordion title="Keyboard shortcuts for documentation workflow">
-- `Cmd+K`: Inline AI edit
-- `Cmd+L`: Open AI chat panel
-- `Cmd+Shift+I`: Composer mode (multi-file editing)
-- `Cmd+/`: Toggle comment (useful for MDX)
-- `Cmd+P`: Quick file navigation
-</Accordion>
-
-<Accordion title="Best practices for AI-assisted documentation">
-- **Be specific in prompts**: Instead of "improve this," try "add a code example with error handling"
-- **Review all AI output**: Always verify technical accuracy and test code examples
-- **Use consistent terminology**: Reference your `AGENTS.md` file for approved terms
-- **Iterate incrementally**: Make small, focused changes rather than large rewrites
-</Accordion>
-
-## Troubleshooting
-
-<AccordionGroup>
-<Accordion title="Skill not loading or not being used">
-Check that the skill was installed correctly:
-
-```bash
-ls -la ~/.cursor/skills
-```
-
-If missing, reinstall:
-```bash
-npx skills add https://mintlify.com/docs --force
-```
-</Accordion>
-
-<Accordion title="AI suggestions seem unaware of Mintlify components">
-1. Ensure you're in the correct project directory
-2. Verify `mint.json` exists in the root
-3. Restart Cursor to reload project context
-4. Mention "Use Mintlify components" explicitly in your prompts
-</Accordion>
-
-<Accordion title="Performance issues with large documentation projects">
-- Exclude build directories in `.cursorignore`:
-  ```
-  .mint/
-  node_modules/
-  dist/
-  ```
-- Close unused file tabs to reduce context size
-- Use specific file references in prompts instead of "in this project"
-</Accordion>
-</AccordionGroup>
-
-## Next Steps
-
-<CardGroup cols={2}>
-<Card title="Writing Style Guide" icon="pen" href="/essentials/writing-style">
-  Learn Mintlify's documentation standards
-</Card>
-<Card title="Component Reference" icon="puzzle-piece" href="/components/overview">
-  Explore all available Mintlify components
-</Card>
-<Card title="Configuration" icon="gear" href="/settings/global">
-  Customize your documentation site
-</Card>
-<Card title="Publishing" icon="rocket" href="/essentials/deployment">
-  Deploy your documentation to production
-</Card>
-</CardGroup>

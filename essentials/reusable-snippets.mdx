@@ -1,530 +1,110 @@
 ---
 title: "Reusable snippets"
-description: "Keep your documentation DRY with reusable content snippets"
+description: "Reusable, custom snippets to keep content in sync"
+icon: "recycle"
 ---
 
 import SnippetIntro from '/snippets/snippet-intro.mdx';
 
 <SnippetIntro />
 
-## Why use snippets?
+## Creating a custom snippet
 
-Snippets solve common documentation challenges:
-
-<CardGroup cols={2}>
-
-<Card title="Consistency" icon="check-double">
-Update content once, reflect everywhere automatically
-</Card>
-
-<Card title="Efficiency" icon="bolt">
-Write once, reuse across multiple pages
-</Card>
-
-<Card title="Maintainability" icon="wrench">
-Fix errors in one place instead of hunting through files
-</Card>
-
-<Card title="Scalability" icon="chart-line">
-Manage growing documentation without duplication
-</Card>
-
-</CardGroup>
-
-<Tip>
-Use snippets for: disclaimers, prerequisites, common setup instructions, API endpoints, company information, and frequently referenced content.
-</Tip>
-
-## Creating snippets
-
-All snippets must live in the `snippets/` directory at the root of your docs.
-
-<Warning>
-Pages in the `snippets/` directory are **not** rendered as standalone pages. They exist only to be imported and used in other files.
-</Warning>
-
-### Basic snippet structure
-
-<Steps>
-  <Step title="Create the snippets directory">
-    If it doesn't exist, create a `snippets/` folder:
-    
-    ```bash
-    mkdir snippets
-    ```
-  </Step>
-  
-  <Step title="Create your snippet file">
-    Create an MDX file in the snippets directory:
-    
-    ```bash
-    touch snippets/prerequisites.mdx
-    ```
-  </Step>
-  
-  <Step title="Add content">
-    Write the content you want to reuse:
-    
-    ```mdx snippets/prerequisites.mdx
-    ## Prerequisites
-    
-    Before you begin, ensure you have:
-    
-    - Node.js 18 or later installed
-    - A package manager (npm, yarn, or pnpm)
-    - Basic knowledge of JavaScript
-    ```
-  </Step>
-</Steps>
-
-## Using snippets
-
-### Default export (MDX content)
-
-Import and use snippets as React components:
-
-<Tabs>
-  <Tab title="Creating the snippet">
-    ```mdx snippets/api-note.mdx
-    ## API Key Required
-    
-    All API requests require authentication. Include your API key in the request headers:
-    
-    ```bash
-    curl -H "Authorization: Bearer YOUR_API_KEY" https://api.example.com
-    ```
-    
-    Get your API key from the [dashboard](https://dashboard.example.com).
-    ```
-  </Tab>
-  
-  <Tab title="Using the snippet">
-    ```mdx getting-started.mdx
-    ---
-    title: Getting Started
-    ---
-    
-    import ApiNote from '/snippets/api-note.mdx';
-    
-    Welcome to our API documentation!
-    
-    <ApiNote />
-    
-    Now you're ready to make your first request.
-    ```
-  </Tab>
-</Tabs>
+**Pre-condition**: You must create your snippet file in the `snippets` directory.
 
 <Note>
-Import paths must start with `/snippets/` and use the full path from the root of your docs directory.
+  Any page in the `snippets` directory will be treated as a snippet and will not
+  be rendered into a standalone page. If you want to create a standalone page
+  from the snippet, import the snippet into another file and call it as a
+  component.
 </Note>
 
-### Snippets with variables
+### Default export
 
-Pass props to customize snippet content for different contexts:
+1. Add content to your snippet file that you want to re-use across multiple
+   locations. Optionally, you can add variables that can be filled in via props
+   when you import the snippet.
 
-<CodeGroup>
-
-```mdx snippets/install-command.mdx
-Install the package using your preferred package manager:
-
-```bash
-{packageManager} install {packageName}
+```mdx snippets/my-snippet.mdx
+Hello world! This is my content I want to reuse across pages. My keyword of the
+day is {word}.
 ```
-
-Start the development server:
-
-```bash
-{packageManager} run dev
-```
-```
-
-```mdx usage.mdx
----
-title: Installation
----
-
-import InstallCommand from '/snippets/install-command.mdx';
-
-## With npm
-
-<InstallCommand packageManager="npm" packageName="mintlify" />
-
-## With yarn
-
-<InstallCommand packageManager="yarn" packageName="mintlify" />
-
-## With pnpm
-
-<InstallCommand packageManager="pnpm" packageName="mintlify" />
-```
-
-</CodeGroup>
-
-<Tip>
-Use variables in snippets when you need slight variations of the same content across different pages.
-</Tip>
-
-## Exported variables
-
-Share static values across your documentation:
-
-<Steps>
-  <Step title="Export variables from snippet">
-    ```mdx snippets/constants.mdx
-    export const companyName = 'Acme Corporation';
-    export const supportEmail = 'support@acme.com';
-    export const currentVersion = 'v2.4.0';
-    
-    export const apiEndpoint = {
-      production: 'https://api.acme.com',
-      staging: 'https://staging-api.acme.com'
-    };
-    ```
-  </Step>
-  
-  <Step title="Import and use variables">
-    ```mdx contact.mdx
-    ---
-    title: Contact Us
-    ---
-    
-    import { companyName, supportEmail } from '/snippets/constants.mdx';
-    
-    # Contact {companyName}
-    
-    Need help? Email us at {supportEmail}
-    ```
-  </Step>
-  
-  <Step title="Access object properties">
-    ```mdx api-reference.mdx
-    ---
-    title: API Reference
-    ---
-    
-    import { apiEndpoint, currentVersion } from '/snippets/constants.mdx';
-    
-    # API Reference {currentVersion}
-    
-    Base URL: `{apiEndpoint.production}`
-    ```
-  </Step>
-</Steps>
-
-## Exported components
-
-Create reusable components with complex logic:
-
-<Tabs>
-  <Tab title="Component snippet">
-    ```mdx snippets/status-badge.mdx
-    export const StatusBadge = ({ status }) => {
-      const colors = {
-        stable: '#10b981',
-        beta: '#f59e0b',
-        deprecated: '#ef4444'
-      };
-      
-      return (
-        <span style={{
-          backgroundColor: colors[status],
-          color: 'white',
-          padding: '2px 8px',
-          borderRadius: '4px',
-          fontSize: '12px',
-          fontWeight: 'bold'
-        }}>
-          {status.toUpperCase()}
-        </span>
-      );
-    };
-    ```
-  </Tab>
-  
-  <Tab title="Usage">
-    ```mdx features.mdx
-    ---
-    title: Features
-    ---
-    
-    import { StatusBadge } from '/snippets/status-badge.mdx';
-    
-    ## Feature List
-    
-    - **Authentication** <StatusBadge status="stable" />
-    - **Webhooks** <StatusBadge status="beta" />
-    - **Legacy API** <StatusBadge status="deprecated" />
-    ```
-  </Tab>
-</Tabs>
 
 <Warning>
-MDX syntax does not compile inside arrow function components. Use HTML elements instead of MDX components when creating exported components.
+  The content that you want to reuse must be inside the `snippets` directory in
+  order for the import to work.
 </Warning>
 
-## Advanced patterns
+2. Import the snippet into your destination file.
 
-### Conditional content
+```mdx destination-file.mdx
+---
+title: My title
+description: My Description
+---
 
-Create snippets that adapt based on props:
+import MySnippet from '/snippets/path/to/my-snippet.mdx';
 
-```mdx snippets/platform-setup.mdx
-export const PlatformSetup = ({ platform }) => {
-  const instructions = {
-    macos: (
-      <div>
-        <h3>macOS Setup</h3>
-        <p>Install using Homebrew:</p>
-        <pre>brew install mintlify</pre>
-      </div>
-    ),
-    windows: (
-      <div>
-        <h3>Windows Setup</h3>
-        <p>Install using npm:</p>
-        <pre>npm install -g mintlify</pre>
-      </div>
-    ),
-    linux: (
-      <div>
-        <h3>Linux Setup</h3>
-        <p>Install using package manager or npm:</p>
-        <pre>sudo npm install -g mintlify</pre>
-      </div>
-    )
-  };
-  
-  return instructions[platform] || instructions.macos;
-};
+## Header
+
+Lorem impsum dolor sit amet.
+
+<MySnippet word="bananas" />
 ```
 
-### Nested snippets
+### Reusable variables
 
-Snippets can import other snippets:
+1. Export a variable from your snippet file:
 
-<CodeGroup>
+```mdx snippets/path/to/custom-variables.mdx
+export const myName = 'my name';
 
-```mdx snippets/common-note.mdx
-<Note>
-This is a common note used across multiple snippets.
-</Note>
+export const myObject = { fruit: 'strawberries' };
 ```
 
-```mdx snippets/setup-guide.mdx
-import CommonNote from '/snippets/common-note.mdx';
+2. Import the snippet from your destination file and use the variable:
 
-## Setup Guide
+```mdx destination-file.mdx
+---
+title: My title
+description: My Description
+---
 
-Follow these steps to get started:
+import { myName, myObject } from '/snippets/path/to/custom-variables.mdx';
 
-1. Install dependencies
-2. Configure your environment
-3. Run the application
-
-<CommonNote />
+Hello, my name is {myName} and I like {myObject.fruit}.
 ```
 
-</CodeGroup>
+### Reusable components
 
-## Real-world examples
+1. Inside your snippet file, create a component that takes in props by exporting
+   your component in the form of an arrow function.
 
-### API endpoint documentation
-
-Keep API endpoints consistent across your docs:
-
-```mdx snippets/api-endpoints.mdx
-export const endpoints = {
-  base: 'https://api.example.com/v1',
-  auth: '/auth/login',
-  users: '/users',
-  posts: '/posts',
-  comments: '/comments'
-};
-
-export const ApiEndpoint = ({ path, method = 'GET' }) => (
-  <div style={{
-    backgroundColor: '#f3f4f6',
-    padding: '12px',
-    borderRadius: '6px',
-    fontFamily: 'monospace'
-  }}>
-    <span style={{ 
-      color: method === 'GET' ? '#10b981' : '#3b82f6',
-      fontWeight: 'bold',
-      marginRight: '8px'
-    }}>
-      {method}
-    </span>
-    {endpoints.base}{path}
-  </div>
-);
-```
-
-**Usage:**
-
-```mdx
-import { ApiEndpoint } from '/snippets/api-endpoints.mdx';
-
-## Get User
-
-<ApiEndpoint path="/users/:id" method="GET" />
-```
-
-### Prerequisites checklist
-
-Standardize prerequisites across tutorials:
-
-```mdx snippets/prerequisites.mdx
-export const Prerequisites = ({ items = [] }) => (
+```mdx snippets/custom-component.mdx
+export const MyComponent = ({ title }) => (
   <div>
-    <h3>Prerequisites</h3>
-    <p>Before you begin, ensure you have:</p>
-    <ul>
-      {items.map((item, index) => (
-        <li key={index}>{item}</li>
-      ))}
-    </ul>
+    <h1>{title}</h1>
+    <p>... snippet content ...</p>
   </div>
 );
 ```
 
-**Usage:**
+<Warning>
+  MDX does not compile inside the body of an arrow function. Stick to HTML
+  syntax when you can or use a default export if you need to use MDX.
+</Warning>
 
-```mdx
-import { Prerequisites } from '/snippets/prerequisites.mdx';
+2. Import the snippet into your destination file and pass in the props
 
-<Prerequisites items={[
-  'Node.js 18 or later',
-  'A text editor (VS Code recommended)',
-  'Basic knowledge of React'
-]} />
+```mdx destination-file.mdx
+---
+title: My title
+description: My Description
+---
+
+import { MyComponent } from '/snippets/custom-component.mdx';
+
+Lorem ipsum dolor sit amet.
+
+<MyComponent title={'Custom title'} />
 ```
-
-### Version warnings
-
-Display consistent version warnings:
-
-```mdx snippets/version-warning.mdx
-export const VersionWarning = ({ version, message }) => (
-  <Warning>
-    **{version}**: {message}
-  </Warning>
-);
-```
-
-## Best practices
-
-<AccordionGroup>
-  <Accordion icon="folder-tree" title="Organize by category">
-    Create subdirectories in `snippets/` to organize related content:
-    
-    ```
-    snippets/
-    ├── api/
-    │   ├── authentication.mdx
-    │   └── rate-limits.mdx
-    ├── setup/
-    │   ├── prerequisites.mdx
-    │   └── installation.mdx
-    └── legal/
-        ├── disclaimer.mdx
-        └── terms.mdx
-    ```
-  </Accordion>
-  
-  <Accordion icon="file-signature" title="Use descriptive names">
-    Name snippets clearly so their purpose is obvious:
-    - `api-authentication-note.mdx` ✓
-    - `snippet1.mdx` ✗
-  </Accordion>
-  
-  <Accordion icon="code-simple" title="Keep snippets focused">
-    Each snippet should serve one clear purpose. Don't create catch-all snippets with unrelated content.
-  </Accordion>
-  
-  <Accordion icon="book" title="Document your snippets">
-    Add comments in snippet files explaining their purpose and how to use them:
-    
-    ```mdx
-    {/* 
-      API Key Notice
-      Use this snippet to remind users to include API keys
-      Props: none
-    */}
-    ```
-  </Accordion>
-  
-  <Accordion icon="check" title="Test snippet changes">
-    When updating a snippet, check all pages that import it to ensure the changes work correctly.
-  </Accordion>
-</AccordionGroup>
-
-## Troubleshooting
-
-<Accordion title="Import path not found">
-  
-**Problem:** `Cannot find module '/snippets/my-snippet.mdx'`
-
-**Solution:** Ensure:
-- The snippet file exists in the `snippets/` directory
-- The import path starts with `/snippets/`
-- The file extension is included (`.mdx`)
-
-```mdx
-// ✗ Wrong
-import MySnippet from 'snippets/my-snippet.mdx';
-
-// ✓ Correct
-import MySnippet from '/snippets/my-snippet.mdx';
-```
-
-</Accordion>
-
-<Accordion title="Props not working">
-
-**Problem:** Variables aren't being replaced in the snippet
-
-**Solution:** Wrap variables in curly braces `{variable}`, not in code blocks or plain text.
-
-```mdx
-// ✗ Wrong - in code block
-```
-Hello {name}
-```
-
-// ✓ Correct - in text
-Hello {name}
-```
-
-</Accordion>
-
-<Accordion title="Snippet rendered as page">
-
-**Problem:** Snippet appears as a standalone page in navigation
-
-**Solution:** Ensure the file is inside the `snippets/` directory and not listed in `docs.json` navigation.
-
-</Accordion>
-
-## Next steps
-
-<CardGroup cols={2}>
-
-<Card title="Master MDX" icon="pen-to-square" href="/essentials/markdown">
-  Learn all MDX syntax and components
-</Card>
-
-<Card title="Code examples" icon="code" href="/essentials/code">
-  Create reusable code snippet libraries
-</Card>
-
-<Card title="Images" icon="image" href="/essentials/images">
-  Reference images from snippets
-</Card>
-
-<Card title="Navigation" icon="compass" href="/essentials/navigation">
-  Structure your documentation site
-</Card>
-
-</CardGroup>

@@ -1,196 +1,35 @@
 ---
 title: 'Images and embeds'
-description: 'Add images, videos, and rich media to enhance your documentation'
+description: 'Add image, video, and other HTML elements'
+icon: 'image'
 ---
 
 <img
   style={{ borderRadius: '0.5rem' }}
   src="https://mintlify-assets.b-cdn.net/bigbend.jpg"
-  alt="Beautiful landscape"
 />
 
-## Image basics
+## Image
 
-Images help clarify concepts, show UI elements, and make documentation more engaging. Mintlify supports multiple ways to add images.
+### Using Markdown
 
-<Tabs>
-  <Tab title="Markdown syntax">
-    Use standard Markdown syntax for simple images:
-    
-    ```md
-    ![Alt text](/images/screenshot.png)
-    ```
-    
-    The alt text improves accessibility and SEO.
-  </Tab>
-  
-  <Tab title="HTML syntax">
-    Use HTML `<img>` tags for more control:
-    
-    ```html
-    <img 
-      src="/images/screenshot.png" 
-      alt="Dashboard overview"
-      style={{ borderRadius: '0.5rem' }}
-    />
-    ```
-    
-    This allows custom styling, dimensions, and attributes.
-  </Tab>
-</Tabs>
+The [markdown syntax](https://www.markdownguide.org/basic-syntax/#images) lets you add images using the following code
 
-<Note>
-Image file sizes should be under 5MB for optimal loading performance. For larger files, use external hosting services like Cloudinary or AWS S3.
-</Note>
-
-## Image organization
-
-Keep your documentation images organized with a clear folder structure.
-
-<Steps>
-  <Step title="Create an images directory">
-    Store all images in an `/images` folder at the root of your docs:
-    
-    ```
-    docs/
-    ├── images/
-    │   ├── getting-started/
-    │   │   ├── setup.png
-    │   │   └── dashboard.png
-    │   ├── api/
-    │   │   └── endpoint.png
-    │   └── logo.svg
-    └── index.mdx
-    ```
-  </Step>
-  
-  <Step title="Use descriptive names">
-    Name files clearly: `dashboard-overview.png` instead of `img1.png`
-  </Step>
-  
-  <Step title="Reference with absolute paths">
-    Always use root-relative paths starting with `/`:
-    
-    ```md
-    ![Setup screen](/images/getting-started/setup.png)
-    ```
-  </Step>
-</Steps>
-
-## Frame component
-
-The `Frame` component adds borders, shadows, and styling to images, making them stand out beautifully.
-
-<Tabs>
-  <Tab title="Preview">
-    <Frame>
-      <img src="https://mintlify-assets.b-cdn.net/bigbend.jpg" alt="Framed image" />
-    </Frame>
-  </Tab>
-  
-  <Tab title="Code">
-    ```mdx
-    <Frame>
-      <img src="/images/dashboard.png" alt="Dashboard" />
-    </Frame>
-    ```
-  </Tab>
-</Tabs>
-
-<Tip>
-Use `Frame` for screenshots of your application UI to make them stand out from the rest of your content.
-</Tip>
-
-### Frame with captions
-
-Add context with captions below your images:
-
-<Frame caption="The main dashboard showing user analytics">
-  <img src="https://mintlify-assets.b-cdn.net/bigbend.jpg" alt="Dashboard view" />
-</Frame>
-
-```mdx
-<Frame caption="The main dashboard showing user analytics">
-  <img src="/images/dashboard.png" alt="Dashboard view" />
-</Frame>
+```md
+![title](/path/image.jpg)
 ```
 
-## Image sizing
+Note that the image file size must be less than 5MB. Otherwise, we recommend hosting on a service like [Cloudinary](https://cloudinary.com/) or [S3](https://aws.amazon.com/s3/). You can then use that URL and embed.
 
-Control image dimensions for consistent layouts.
+### Using embeds
 
-<Accordion title="Inline styling">
-
-Use the `style` attribute for custom sizing:
+To get more customizability with images, you can also use [embeds](/writing-content/embed) to add images
 
 ```html
-<img 
-  src="/images/icon.png"
-  alt="Icon"
-  style={{ width: '200px', height: '200px' }}
-/>
+<img height="200" src="/path/image.jpg" />
 ```
 
-</Accordion>
-
-<Accordion title="Width and height attributes">
-
-Use standard HTML attributes:
-
-```html
-<img 
-  src="/images/banner.png"
-  alt="Banner"
-  width="800"
-  height="400"
-/>
-```
-
-</Accordion>
-
-<Accordion title="Responsive images">
-
-Make images responsive with max-width:
-
-```html
-<img 
-  src="/images/diagram.png"
-  alt="Architecture diagram"
-  style={{ maxWidth: '100%', height: 'auto' }}
-/>
-```
-
-</Accordion>
-
-## External images
-
-Host large images or assets externally for better performance.
-
-<CodeGroup>
-
-```md Cloudinary
-![Product screenshot](https://res.cloudinary.com/demo/image/upload/sample.jpg)
-```
-
-```md AWS S3
-![Diagram](https://my-bucket.s3.amazonaws.com/images/architecture.png)
-```
-
-```md CDN
-![Hero image](https://cdn.example.com/hero.jpg)
-```
-
-</CodeGroup>
-
-<Warning>
-Ensure external images are served over HTTPS and from reliable CDNs to prevent broken links and slow loading.
-</Warning>
-
-## Video embeds
-
-Embed videos to create richer, more engaging documentation.
-
-### YouTube videos
+## Embeds and HTML elements
 
 <iframe
   width="560"
@@ -203,209 +42,18 @@ Embed videos to create richer, more engaging documentation.
   style={{ width: '100%', borderRadius: '0.5rem' }}
 ></iframe>
 
-```html
-<iframe
-  src="https://www.youtube.com/embed/VIDEO_ID"
-  title="Video title"
-  frameBorder="0"
-  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-  allowFullScreen
-  style={{ width: '100%', borderRadius: '0.5rem' }}
-></iframe>
-```
-
-### Loom videos
-
-Embed Loom recordings for walkthroughs:
-
-```html
-<iframe
-  src="https://www.loom.com/embed/VIDEO_ID"
-  frameBorder="0"
-  webkitallowfullscreen
-  mozallowfullscreen
-  allowFullScreen
-  style={{ width: '100%', height: '450px', borderRadius: '0.5rem' }}
-></iframe>
-```
+<br />
 
 <Tip>
-Videos are perfect for tutorials, product demos, and complex explanations that benefit from visual walkthroughs.
+
+Mintlify supports [HTML tags in Markdown](https://www.markdownguide.org/basic-syntax/#html). This is helpful if you prefer HTML tags to Markdown syntax, and lets you create documentation with infinite flexibility.
+
 </Tip>
 
-## Other embeds
+### iFrames
 
-Mintlify supports any HTML element, giving you unlimited flexibility.
+Loads another HTML page within the document. Most commonly used for embedding videos.
 
-<AccordionGroup>
-  <Accordion icon="chart-line" title="Interactive charts">
-    Embed interactive visualizations from tools like Observable, CodePen, or custom JavaScript:
-    
-    ```html
-    <iframe src="https://observablehq.com/embed/@user/notebook"></iframe>
-    ```
-  </Accordion>
-  
-  <Accordion icon="file-pdf" title="PDF documents">
-    Embed PDF files directly:
-    
-    ```html
-    <iframe src="/documents/whitepaper.pdf" width="100%" height="600px"></iframe>
-    ```
-  </Accordion>
-  
-  <Accordion icon="window" title="Live demos">
-    Embed CodeSandbox or StackBlitz for interactive code examples:
-    
-    ```html
-    <iframe 
-      src="https://codesandbox.io/embed/example"
-      style={{ width: '100%', height: '500px', border: 0, borderRadius: '0.5rem' }}
-    ></iframe>
-    ```
-  </Accordion>
-  
-  <Accordion icon="twitter" title="Social media">
-    Embed tweets, LinkedIn posts, or other social content using their embed codes.
-  </Accordion>
-</AccordionGroup>
-
-## Image optimization tips
-
-<CardGroup cols={2}>
-
-<Card title="Compress images" icon="compress">
-Use tools like TinyPNG or ImageOptim to reduce file sizes without quality loss
-</Card>
-
-<Card title="Use appropriate formats" icon="image">
-PNG for screenshots, JPG for photos, SVG for logos and icons
-</Card>
-
-<Card title="Provide alt text" icon="universal-access">
-Always include descriptive alt text for accessibility and SEO
-</Card>
-
-<Card title="Consider lazy loading" icon="hourglass">
-External hosting services often provide automatic lazy loading
-</Card>
-
-</CardGroup>
-
-## Real-world examples
-
-### Documentation screenshots
-
-Show step-by-step instructions with annotated screenshots:
-
-<Steps>
-  <Step title="Navigate to settings">
-    <Frame>
-      <img src="https://mintlify-assets.b-cdn.net/bigbend.jpg" alt="Settings navigation" />
-    </Frame>
-    
-    Click the gear icon in the top right corner.
-  </Step>
-  
-  <Step title="Configure your preferences">
-    <Frame>
-      <img src="https://mintlify-assets.b-cdn.net/bigbend.jpg" alt="Preferences panel" />
-    </Frame>
-    
-    Adjust the settings according to your needs.
-  </Step>
-  
-  <Step title="Save changes">
-    Click **Save** to apply your configuration.
-  </Step>
-</Steps>
-
-### Architecture diagrams
-
-Visualize system architecture and data flow:
-
-<Frame caption="Microservices architecture overview">
-  <img 
-    src="https://mintlify-assets.b-cdn.net/bigbend.jpg"
-    alt="Architecture diagram"
-    style={{ maxWidth: '100%' }}
-  />
-</Frame>
-
-```mdx
-<Frame caption="Microservices architecture overview">
-  <img src="/images/architecture.png" alt="Architecture diagram" />
-</Frame>
+```html
+<iframe src="https://www.youtube.com/embed/4KzFe50RQkQ"> </iframe>
 ```
-
-### Before and after comparisons
-
-Show the impact of features or changes:
-
-<Tabs>
-  <Tab title="Before">
-    <Frame>
-      <img src="https://mintlify-assets.b-cdn.net/bigbend.jpg" alt="Before optimization" />
-    </Frame>
-    
-    Load time: 3.2s
-  </Tab>
-  
-  <Tab title="After">
-    <Frame>
-      <img src="https://mintlify-assets.b-cdn.net/bigbend.jpg" alt="After optimization" />
-    </Frame>
-    
-    Load time: 0.8s - **75% faster!**
-  </Tab>
-</Tabs>
-
-## Accessibility best practices
-
-Make your visual content accessible to all users:
-
-<Steps>
-  <Step title="Write descriptive alt text">
-    Describe what the image shows, not just "screenshot" or "image"
-    
-    ```html
-    <!-- Good -->
-    <img src="/dashboard.png" alt="Analytics dashboard showing user growth over 6 months" />
-    
-    <!-- Bad -->
-    <img src="/dashboard.png" alt="screenshot" />
-    ```
-  </Step>
-  
-  <Step title="Don't rely on images alone">
-    Always provide text explanations alongside images. Never put critical information only in images.
-  </Step>
-  
-  <Step title="Use sufficient contrast">
-    Ensure text in images has good contrast ratios for readability.
-  </Step>
-  
-  <Step title="Provide transcripts for videos">
-    Include text transcripts or captions for video content.
-  </Step>
-</Steps>
-
-<Info>
-Mintlify supports [HTML tags in Markdown](https://www.markdownguide.org/basic-syntax/#html), giving you infinite flexibility for embedding any type of content.
-</Info>
-
-## Next steps
-
-<AccordionGroup>
-  <Accordion icon="code" title="Add code examples">
-    Learn how to include syntax-highlighted code blocks in the [code guide](/essentials/code).
-  </Accordion>
-  
-  <Accordion icon="recycle" title="Reuse images across pages">
-    Use snippets to reference the same image in multiple places with [reusable snippets](/essentials/reusable-snippets).
-  </Accordion>
-  
-  <Accordion icon="pen" title="Master MDX syntax">
-    Explore all content features in the [markdown guide](/essentials/markdown).
-  </Accordion>
-</AccordionGroup>

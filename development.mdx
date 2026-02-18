@@ -1,499 +1,94 @@
 ---
-title: "Local Development"
-description: "Set up your local environment to preview and edit documentation with instant hot reload"
+title: 'Development'
+description: 'Preview changes locally to update your docs'
 ---
 
 <Info>
-  **Prerequisites**
+  **Prerequisites**:
   - Node.js version 19 or higher
-  - A docs repository with a `docs.json` configuration file
-  - Terminal access and basic Git knowledge
+  - A docs repository with a `docs.json` file
 </Info>
 
-## Installation
-
-The Mintlify CLI provides a local development server with hot reload, allowing you to preview changes instantly as you edit your documentation.
+Follow these steps to install and run Mintlify on your operating system.
 
 <Steps>
-  <Step title="Install the Mintlify CLI">
-    Install the CLI globally using your preferred package manager:
+<Step title="Install the Mintlify CLI">
 
-    <CodeGroup>
-    ```bash npm
-    npm i -g mint
-    ```
+```bash
+npm i -g mint
+```
+</Step>
 
-    ```bash yarn
-    yarn global add mint
-    ```
+<Step title="Preview locally">
 
-    ```bash pnpm
-    pnpm add -g mint
-    ```
-    </CodeGroup>
+Navigate to your docs directory where your `docs.json` file is located, and run the following command:
 
-    <Tip>
-      On macOS/Linux, you may need to use `sudo` if you get permission errors. On Windows, run your terminal as administrator.
-    </Tip>
+```bash
+mint dev
+```
 
-    Verify the installation:
+A local preview of your documentation will be available at `http://localhost:3000`.
 
-    ```bash
-    mint --version
-    ```
-
-    You should see the current version number displayed.
-  </Step>
-
-  <Step title="Navigate to Your Docs Directory">
-    Change to the directory containing your `docs.json` file:
-
-    ```bash
-    cd /path/to/your/docs
-    ```
-
-    <Warning>
-      The `mint dev` command must be run from the directory containing your `docs.json` file. If you see an error about missing configuration, check that you're in the correct directory.
-    </Warning>
-  </Step>
-
-  <Step title="Start the Development Server">
-    Launch the local preview server:
-
-    ```bash
-    mint dev
-    ```
-
-    You'll see output similar to:
-
-    ```
-    ✓ Ready on http://localhost:3000
-    ```
-
-    Your documentation is now available at `http://localhost:3000` and will automatically reload when you make changes to any MDX files or the `docs.json` configuration.
-
-    <Tip>
-      Keep the terminal window open while you work. Press `Ctrl+C` to stop the server when you're done.
-    </Tip>
-  </Step>
+</Step>
 </Steps>
 
-## Development Workflow
+## Custom ports
 
-### Hot Reload
-
-The Mintlify dev server watches your files for changes and automatically reloads the browser preview. This means you can:
-
-1. Edit an MDX file in your editor
-2. Save the file
-3. Instantly see the changes in your browser
-
-No manual refresh needed!
-
-<Tip>
-  For the best experience, position your editor and browser side-by-side so you can see changes as you type.
-</Tip>
-
-### File Structure
-
-A typical Mintlify docs repository structure:
-
-```
-my-docs/
-├── docs.json           # Site configuration
-├── index.mdx          # Home page
-├── quickstart.mdx     # Getting started guide
-├── images/            # Image assets
-│   └── logo.png
-├── api-reference/     # API documentation
-│   ├── introduction.mdx
-│   └── openapi.json   # OpenAPI specification
-└── guides/            # Additional guides
-    ├── guide-1.mdx
-    └── guide-2.mdx
-```
-
-<AccordionGroup>
-  <Accordion title="docs.json" icon="gear">
-    The main configuration file. Controls:
-    - Site name and branding
-    - Color scheme
-    - Navigation structure
-    - Logo and favicon
-    - Footer and navbar
-    - Integrations
-
-    See the [Settings guide](/essentials/settings) for full details.
-  </Accordion>
-
-  <Accordion title="MDX Files" icon="file">
-    Your documentation pages written in MDX (Markdown + React components). Each file:
-    - Starts with YAML frontmatter for metadata
-    - Contains your content in Markdown
-    - Can include Mintlify components
-    - Must be referenced in `docs.json` navigation to appear
-
-    See the [Markdown guide](/essentials/markdown) for syntax details.
-  </Accordion>
-
-  <Accordion title="Assets Directory" icon="folder">
-    Store images, videos, and other static assets. Common organization:
-    - `/images/` - Screenshots and diagrams
-    - `/videos/` - Video tutorials
-    - `/downloads/` - Downloadable files
-
-    Reference assets using relative paths: `![Alt text](/images/logo.png)`
-  </Accordion>
-
-  <Accordion title="OpenAPI Specification" icon="code">
-    If you have an API, include your OpenAPI/Swagger JSON or YAML file. Mintlify auto-generates beautiful API documentation from it.
-
-    See [API Documentation](/api-reference/introduction) for setup details.
-  </Accordion>
-</AccordionGroup>
-
-## CLI Commands
-
-### Custom Port
-
-By default, the dev server runs on port 3000. Use the `--port` flag to specify a different port:
+By default, Mintlify uses port 3000. You can customize the port Mintlify runs on by using the `--port` flag. For example, to run Mintlify on port 3333, use this command:
 
 ```bash
 mint dev --port 3333
 ```
 
-If the specified port is already in use, Mintlify automatically tries the next available port:
+If you attempt to run Mintlify on a port that's already in use, it will use the next available port:
 
-```
+```md
 Port 3000 is already in use. Trying 3001 instead.
 ```
 
-### Validate Links
+## Mintlify versions
 
-Check your documentation for broken links:
+Please note that each CLI release is associated with a specific version of Mintlify. If your local preview does not align with the production version, please update the CLI:
+
+```bash
+npm update -g mint
+```
+
+## Validating links
+
+The CLI can assist with validating links in your documentation. To identify any broken links, use the following command:
 
 ```bash
 mint broken-links
 ```
 
-This command:
-- Scans all MDX files for links
-- Tests internal links between pages
-- Verifies external URLs (with timeout)
-- Reports any broken or invalid links
+## Deployment
 
-<Tip>
-  Run this before deploying to catch broken links early. It's especially useful after reorganizing your navigation structure.
-</Tip>
+If the deployment is successful, you should see the following:
 
-Sample output:
+<Frame>
+  <img src="/images/checks-passed.png" alt="Screenshot of a deployment confirmation message that says All checks have passed." style={{ borderRadius: '0.5rem' }} />
+</Frame>
 
-```
-Checking links...
-✓ All internal links valid (42 links checked)
-✗ 2 broken external links found:
-  - guide.mdx:15 → https://example.com/api (404 Not Found)
-  - index.mdx:8 → https://old-domain.com (Connection failed)
-```
+## Code formatting
 
-### Update CLI
-
-Keep your CLI version up to date to match your production environment:
-
-```bash
-npm update -g mint
-```
-
-<Warning>
-  CLI version mismatches can cause differences between local preview and production. If you notice discrepancies, update your CLI first.
-</Warning>
-
-Check your current version:
-
-```bash
-mint --version
-```
-
-## Editor Setup
-
-### VS Code Extensions
-
-For the best development experience in VS Code, install these extensions:
-
-<AccordionGroup>
-  <Accordion title="MDX Extension" icon="puzzle-piece">
-    **[MDX VSCode Extension](https://marketplace.visualstudio.com/items?itemName=unifiedjs.vscode-mdx)**
-
-    Provides:
-    - Syntax highlighting for MDX
-    - IntelliSense for components
-    - Error detection
-    - Auto-completion
-
-    Install via command palette:
-    ```
-    ext install unifiedjs.vscode-mdx
-    ```
-  </Accordion>
-
-  <Accordion title="Prettier" icon="wand-magic-sparkles">
-    **[Prettier Extension](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode)**
-
-    Auto-formats your MDX files on save:
-    - Consistent indentation
-    - Proper line breaks
-    - Organized frontmatter
-
-    Install and enable "Format on Save" in VS Code settings.
-  </Accordion>
-
-  <Accordion title="Spell Checker" icon="spell-check">
-    **[Code Spell Checker](https://marketplace.visualstudio.com/items?itemName=streetsidesoftware.code-spell-checker)**
-
-    Catches typos in your documentation:
-    - Underlines misspelled words
-    - Suggests corrections
-    - Customizable dictionary
-
-    Essential for maintaining professional documentation.
-  </Accordion>
-</AccordionGroup>
-
-### Other Editors
-
-- **Cursor**: Built-in MDX support with AI-powered editing. See [Cursor guide](/ai-tools/cursor)
-- **Sublime Text**: Use the MDX package from Package Control
-- **Vim/Neovim**: Install the `vim-mdx-js` plugin
-- **WebStorm**: Built-in MDX support, no plugins needed
+We suggest using extensions on your IDE to recognize and format MDX. If you're a VSCode user, consider the [MDX VSCode extension](https://marketplace.visualstudio.com/items?itemName=unifiedjs.vscode-mdx) for syntax highlighting, and [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode) for code formatting.
 
 ## Troubleshooting
 
 <AccordionGroup>
-  <Accordion title='Error: Could not load the "sharp" module' icon="triangle-exclamation">
-    **Full error message:**
-    ```
-    Error: Could not load the "sharp" module using the darwin-arm64 runtime
-    ```
+  <Accordion title='Error: Could not load the "sharp" module using the darwin-arm64 runtime'>
 
-    **Cause:** Outdated Node.js version or corrupted CLI installation.
-
-    **Solution:**
-    1. Remove the CLI: `npm remove -g mint`
-    2. Upgrade to Node v19 or higher
+    This may be due to an outdated version of node. Try the following:
+    1. Remove the currently-installed version of the CLI: `npm remove -g mint`
+    2. Upgrade to Node v19 or higher.
     3. Reinstall the CLI: `npm i -g mint`
-
-    <Tip>
-      Use [nvm](https://github.com/nvm-sh/nvm) to easily manage Node versions:
-      ```bash
-      nvm install 20
-      nvm use 20
-      ```
-    </Tip>
   </Accordion>
 
-  <Accordion title="Port already in use" icon="plug">
-    **Error message:**
-    ```
-    Error: Port 3000 is already in use
-    ```
-
-    **Solutions:**
-    1. Let Mintlify auto-select the next port (it will try 3001, 3002, etc.)
-    2. Specify a different port: `mint dev --port 4000`
-    3. Kill the process using port 3000:
-       ```bash
-       # macOS/Linux
-       lsof -ti:3000 | xargs kill -9
-
-       # Windows
-       netstat -ano | findstr :3000
-       taskkill /PID <process_id> /F
-       ```
-  </Accordion>
-
-  <Accordion title="Changes not reflecting in browser" icon="rotate">
-    **Possible causes:**
-    - Browser cache
-    - Syntax error in MDX file
-    - `docs.json` configuration error
-
-    **Solutions:**
-    1. Hard refresh the browser: `Cmd+Shift+R` (Mac) or `Ctrl+Shift+R` (Windows)
-    2. Check the terminal for error messages
-    3. Validate your JSON syntax in `docs.json`
-    4. Restart the dev server: press `Ctrl+C` then run `mint dev` again
-  </Accordion>
-
-  <Accordion title="Unknown error / dev server crashes" icon="bug">
-    **Error message:**
-    ```
-    Unknown error occurred
-    ```
-
-    **Solution:**
-    Clear the Mintlify cache and restart:
-
-    ```bash
-    # Remove cache directory
-    rm -rf ~/.mintlify
-
-    # Restart dev server
-    mint dev
-    ```
-
-    This clears cached build artifacts that might be causing issues.
-  </Accordion>
-
-  <Accordion title="Page not found in navigation" icon="map">
-    **Symptom:** Your MDX file exists but doesn't appear in the sidebar.
-
-    **Cause:** The page isn't added to `docs.json` navigation.
-
-    **Solution:**
-    Add your page to the appropriate group in `docs.json`:
-
-    ```json
-    {
-      "navigation": {
-        "tabs": [
-          {
-            "tab": "Guides",
-            "groups": [
-              {
-                "group": "Getting started",
-                "pages": [
-                  "index",
-                  "quickstart",
-                  "your-new-page"  // Add this
-                ]
-              }
-            ]
-          }
-        ]
-      }
-    }
-    ```
-
-    <Warning>
-      The page value should match your filename without the `.mdx` extension.
-    </Warning>
-  </Accordion>
-
-  <Accordion title="Images not loading" icon="image">
-    **Symptom:** Images show broken image icons.
-
-    **Common causes:**
-    1. Incorrect file path
-    2. Image not committed to repository
-    3. Wrong image format
-
-    **Solutions:**
-    - Use absolute paths from root: `/images/logo.png` (not `./images/logo.png`)
-    - Verify image file exists in repository
-    - Use supported formats: PNG, JPG, GIF, SVG, WebP
-    - Check file name capitalization matches exactly
+  <Accordion title="Issue: Encountering an unknown error">
+  
+    Solution: Go to the root of your device and delete the `~/.mintlify` folder. Then run `mint dev` again.
   </Accordion>
 </AccordionGroup>
 
-## Version Management
-
-### CLI Versions
-
-Each CLI version corresponds to a specific Mintlify platform version. Check compatibility:
-
-<CodeGroup>
-```bash Check local version
-mint --version
-```
-
-```bash Check latest version
-npm view mintlify version
-```
-
-```bash Update CLI
-npm update -g mint
-```
-</CodeGroup>
-
-<Info>
-  **Production vs Local Mismatch?**
-  
-  If your local preview looks different from production, update your CLI to match the production version shown in your [dashboard](https://dashboard.mintlify.com).
-</Info>
-
-### Change Log
-
-See what's new in each CLI release:
-
-<Card title="CLI Changelog" icon="clock-rotate-left" href="https://www.npmjs.com/package/mintlify?activeTab=versions">
-  View version history on npm
-</Card>
-
-## Deployment
-
-Once you're satisfied with your local changes, deploy them to production:
-
-<Steps>
-  <Step title="Commit Changes">
-    ```bash
-    git add .
-    git commit -m "Update documentation"
-    ```
-  </Step>
-
-  <Step title="Push to GitHub">
-    ```bash
-    git push origin main
-    ```
-  </Step>
-
-  <Step title="Verify Deployment">
-    Check your [dashboard](https://dashboard.mintlify.com) for build status. Successful deployments show:
-
-    <Frame>
-      <img src="/images/checks-passed.png" alt="Deployment success message" style={{ borderRadius: '0.5rem' }} />
-    </Frame>
-
-    <Tip>
-      Deployments typically complete in 30-60 seconds. If it takes longer, check the build logs for issues.
-    </Tip>
-  </Step>
-</Steps>
-
-## Best Practices
-
-<CardGroup cols={2}>
-  <Card title="Preview Before Push" icon="eye">
-    Always check `http://localhost:3000` before pushing to production. Catch errors early!
-  </Card>
-  <Card title="Run Link Checker" icon="link">
-    Use `mint broken-links` regularly, especially after reorganizing content
-  </Card>
-  <Card title="Use Version Control" icon="code-branch">
-    Create feature branches for major changes. Review in preview before merging
-  </Card>
-  <Card title="Keep CLI Updated" icon="arrow-up">
-    Update your CLI monthly to get latest features and bug fixes
-  </Card>
-</CardGroup>
-
-## Next Steps
-
-<CardGroup cols={2}>
-  <Card title="Writing Content" icon="pen-to-square" href="/essentials/markdown">
-    Master MDX and Mintlify components
-  </Card>
-  <Card title="Site Settings" icon="gear" href="/essentials/settings">
-    Configure your site's appearance
-  </Card>
-  <Card title="Navigation" icon="map" href="/essentials/navigation">
-    Organize pages with tabs and groups
-  </Card>
-  <Card title="Code Examples" icon="code" href="/essentials/code">
-    Add beautiful code blocks
-  </Card>
-</CardGroup>
-
-<Note>
-  **Need help?** Join our [community](https://mintlify.com/community) or email [hi@mintlify.com](mailto:hi@mintlify.com)
-</Note>
+Curious about what changed in the latest CLI version? Check out the [CLI changelog](https://www.npmjs.com/package/mintlify?activeTab=versions).
