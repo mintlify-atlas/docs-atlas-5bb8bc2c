@@ -1,16 +1,11 @@
 ---
 title: 'Introduction'
-description: 'Example section for showcasing API endpoints'
+description: 'Complete API reference for the Plant Store API'
 ---
-
-<Note>
-  If you're not looking to build API reference documentation, you can delete
-  this section by removing the api-reference folder.
-</Note>
 
 ## Welcome
 
-There are two ways to build API documentation: [OpenAPI](https://mintlify.com/docs/api-playground/openapi/setup) and [MDX components](https://mintlify.com/docs/api-playground/mdx/configuration). For the starter kit, we are using the following OpenAPI specification.
+The Plant Store API provides a RESTful interface for managing plant inventory. This documentation covers all available endpoints, authentication methods, and usage examples.
 
 <Card
   title="Plant Store Endpoints"
@@ -20,9 +15,29 @@ There are two ways to build API documentation: [OpenAPI](https://mintlify.com/do
   View the OpenAPI specification file
 </Card>
 
+## Base URL
+
+All API requests should be made to:
+
+```
+http://sandbox.mintlify.com
+```
+
 ## Authentication
 
-All API endpoints are authenticated using Bearer tokens and picked up from the specification file.
+All API endpoints require authentication using Bearer tokens. Include your API token in the Authorization header of each request:
+
+```bash
+Authorization: Bearer YOUR_API_TOKEN
+```
+
+<Warning>
+  Keep your API tokens secure and never share them in public repositories or client-side code.
+</Warning>
+
+### Security Configuration
+
+The API uses Bearer authentication as defined in the OpenAPI specification:
 
 ```json
 "security": [
@@ -31,3 +46,57 @@ All API endpoints are authenticated using Bearer tokens and picked up from the s
   }
 ]
 ```
+
+## API Structure
+
+The Plant Store API is organized around REST principles. It uses standard HTTP methods, accepts JSON request bodies, and returns JSON-encoded responses.
+
+### Available Endpoints
+
+<CardGroup cols={2}>
+  <Card title="Get Plants" icon="list" href="/api-reference/endpoint/get">
+    Retrieve all plants from the store
+  </Card>
+  <Card title="Create Plant" icon="plus" href="/api-reference/endpoint/create">
+    Add a new plant to the inventory
+  </Card>
+  <Card title="Delete Plant" icon="trash" href="/api-reference/endpoint/delete">
+    Remove a plant from the store
+  </Card>
+  <Card title="Webhook" icon="webhook" href="/api-reference/endpoint/webhook">
+    Receive notifications for new plants
+  </Card>
+</CardGroup>
+
+## Response Format
+
+All responses are returned in JSON format with appropriate HTTP status codes:
+
+- `200` - Successful request
+- `204` - Successful request with no content
+- `400` - Bad request or unexpected error
+- `401` - Unauthorized (invalid or missing token)
+- `404` - Resource not found
+
+### Error Handling
+
+When an error occurs, the API returns a JSON object with error details:
+
+```json
+{
+  "error": 400,
+  "message": "Descriptive error message"
+}
+```
+
+<Tip>
+  Always check the HTTP status code and handle errors appropriately in your application.
+</Tip>
+
+## Rate Limiting
+
+To ensure fair usage and API stability, rate limits apply to all endpoints. Contact support if you need higher limits for production use.
+
+## Support
+
+For API support, questions, or feature requests, please contact our development team or consult the full OpenAPI specification linked above.

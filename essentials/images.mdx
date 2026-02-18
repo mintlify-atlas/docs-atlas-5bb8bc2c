@@ -1,35 +1,123 @@
 ---
 title: 'Images and embeds'
-description: 'Add image, video, and other HTML elements'
-icon: 'image'
+description: 'Add images, videos, and other HTML elements to your documentation'
 ---
 
 <img
   style={{ borderRadius: '0.5rem' }}
   src="https://mintlify-assets.b-cdn.net/bigbend.jpg"
+  alt="Scenic landscape"
 />
 
-## Image
+Images and multimedia content make your documentation more engaging and easier to understand. Mintlify supports both markdown image syntax and HTML embeds.
 
-### Using Markdown
+## Images
 
-The [markdown syntax](https://www.markdownguide.org/basic-syntax/#images) lets you add images using the following code
+### Using markdown syntax
+
+The [markdown syntax](https://www.markdownguide.org/basic-syntax/#images) lets you add images using the following code:
 
 ```md
-![title](/path/image.jpg)
+![alt text](/path/to/image.jpg)
 ```
 
-Note that the image file size must be less than 5MB. Otherwise, we recommend hosting on a service like [Cloudinary](https://cloudinary.com/) or [S3](https://aws.amazon.com/s3/). You can then use that URL and embed.
+For example:
 
-### Using embeds
+```md
+![Mintlify logo](/logo/dark.svg)
+```
 
-To get more customizability with images, you can also use [embeds](/writing-content/embed) to add images
+<Note>
+Image file size must be less than 5MB. For larger images, we recommend hosting on a service like [Cloudinary](https://cloudinary.com/) or [S3](https://aws.amazon.com/s3/).
+</Note>
+
+### Using HTML img tags
+
+To get more customizability with images, you can use HTML `<img>` tags with inline styles:
 
 ```html
-<img height="200" src="/path/image.jpg" />
+<img height="200" src="/path/to/image.jpg" alt="Description" />
 ```
 
-## Embeds and HTML elements
+<Tip>
+HTML tags give you control over image dimensions, styling, and other attributes that aren't available in markdown.
+</Tip>
+
+## Image styling examples
+
+<Tabs>
+  <Tab title="Rounded corners">
+    ```html
+    <img
+      style={{ borderRadius: '0.5rem' }}
+      src="/images/screenshot.png"
+      alt="App screenshot"
+    />
+    ```
+  </Tab>
+  <Tab title="Custom size">
+    ```html
+    <img
+      width="400"
+      height="300"
+      src="/images/diagram.png"
+      alt="Architecture diagram"
+    />
+    ```
+  </Tab>
+  <Tab title="Centered with shadow">
+    ```html
+    <img
+      style={{
+        borderRadius: '0.5rem',
+        boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+        margin: '0 auto',
+        display: 'block'
+      }}
+      src="/images/product.png"
+      alt="Product image"
+    />
+    ```
+  </Tab>
+</Tabs>
+
+## Image cards
+
+Combine images with Card components for rich visual layouts:
+
+<CardGroup cols={2}>
+  <Card title="Dashboard view" icon="chart-line">
+    <img
+      src="https://mintlify-assets.b-cdn.net/bigbend.jpg"
+      alt="Dashboard"
+      style={{ borderRadius: '0.5rem', marginTop: '1rem' }}
+    />
+  </Card>
+  <Card title="Mobile app" icon="mobile">
+    <img
+      src="https://mintlify-assets.b-cdn.net/bigbend.jpg"
+      alt="Mobile app"
+      style={{ borderRadius: '0.5rem', marginTop: '1rem' }}
+    />
+  </Card>
+</CardGroup>
+
+```md
+<CardGroup cols={2}>
+  <Card title="Dashboard view" icon="chart-line">
+    <img src="/dashboard.png" alt="Dashboard" />
+  </Card>
+  <Card title="Mobile app" icon="mobile">
+    <img src="/mobile.png" alt="Mobile app" />
+  </Card>
+</CardGroup>
+```
+
+## Video embeds
+
+### YouTube
+
+Embed YouTube videos using iframes:
 
 <iframe
   width="560"
@@ -42,18 +130,156 @@ To get more customizability with images, you can also use [embeds](/writing-cont
   style={{ width: '100%', borderRadius: '0.5rem' }}
 ></iframe>
 
-<br />
+```html
+<iframe
+  width="560"
+  height="315"
+  src="https://www.youtube.com/embed/VIDEO_ID"
+  title="YouTube video player"
+  frameBorder="0"
+  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+  allowFullScreen
+  style={{ width: '100%', borderRadius: '0.5rem' }}
+></iframe>
+```
 
-<Tip>
+### Loom
 
-Mintlify supports [HTML tags in Markdown](https://www.markdownguide.org/basic-syntax/#html). This is helpful if you prefer HTML tags to Markdown syntax, and lets you create documentation with infinite flexibility.
-
-</Tip>
-
-### iFrames
-
-Loads another HTML page within the document. Most commonly used for embedding videos.
+Embed Loom videos for product walkthroughs:
 
 ```html
-<iframe src="https://www.youtube.com/embed/4KzFe50RQkQ"> </iframe>
+<iframe
+  src="https://www.loom.com/embed/VIDEO_ID"
+  frameBorder="0"
+  allowFullScreen
+  style={{ width: '100%', height: '400px', borderRadius: '0.5rem' }}
+></iframe>
+```
+
+### Vimeo
+
+Embed Vimeo videos:
+
+```html
+<iframe
+  src="https://player.vimeo.com/video/VIDEO_ID"
+  frameBorder="0"
+  allow="autoplay; fullscreen; picture-in-picture"
+  allowFullScreen
+  style={{ width: '100%', height: '400px', borderRadius: '0.5rem' }}
+></iframe>
+```
+
+## Other embeds
+
+<Tip>
+Mintlify supports [HTML tags in Markdown](https://www.markdownguide.org/basic-syntax/#html). This is helpful if you prefer HTML tags to Markdown syntax, and lets you create documentation with infinite flexibility.
+</Tip>
+
+### Figma
+
+Embed Figma designs and prototypes:
+
+```html
+<iframe
+  style={{ border: '1px solid rgba(0, 0, 0, 0.1)', borderRadius: '0.5rem' }}
+  width="800"
+  height="450"
+  src="https://www.figma.com/embed?embed_host=share&url=YOUR_FIGMA_URL"
+  allowFullScreen
+></iframe>
+```
+
+### CodeSandbox
+
+Embed live code examples:
+
+```html
+<iframe
+  src="https://codesandbox.io/embed/SANDBOX_ID"
+  style={{
+    width: '100%',
+    height: '500px',
+    border: 0,
+    borderRadius: '0.5rem',
+    overflow: 'hidden'
+  }}
+  allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
+  sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"
+></iframe>
+```
+
+### Twitter
+
+Embed tweets:
+
+```html
+<blockquote class="twitter-tweet">
+  <p lang="en" dir="ltr">
+    Your tweet text here
+  </p>
+  &mdash; Username (@handle)
+  <a href="https://twitter.com/handle/status/TWEET_ID">Date</a>
+</blockquote>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+```
+
+## Best practices
+
+<Accordion title="Optimize image sizes">
+Compress images before uploading to reduce page load times. Aim for under 500KB per image when possible.
+</Accordion>
+
+<Accordion title="Use descriptive alt text">
+Always include alt text for accessibility. Describe what the image shows, not just "image" or "screenshot".
+
+```md
+<!-- Good -->
+![User dashboard showing analytics metrics](/dashboard.png)
+
+<!-- Bad -->
+![image](/dashboard.png)
+```
+</Accordion>
+
+<Accordion title="Host large files externally">
+For files over 5MB, use a CDN or cloud storage service:
+- [Cloudinary](https://cloudinary.com/) - Image and video management
+- [AWS S3](https://aws.amazon.com/s3/) - Object storage
+- [Imgur](https://imgur.com/) - Simple image hosting
+</Accordion>
+
+<Accordion title="Maintain aspect ratios">
+When resizing images, maintain the original aspect ratio to avoid distortion:
+
+```html
+<!-- Specify only width, height scales automatically -->
+<img width="600" src="/image.png" alt="Description" />
+```
+</Accordion>
+
+## Image organization
+
+<Warning>
+Store images in the `/images` directory at the root of your docs project. This keeps your assets organized and makes paths predictable.
+</Warning>
+
+Recommended folder structure:
+
+```bash
+docs/
+├── images/
+│   ├── screenshots/
+│   ├── diagrams/
+│   ├── logos/
+│   └── icons/
+├── essentials/
+└── api-reference/
+```
+
+Then reference images using root-relative paths:
+
+```md
+![Architecture diagram](/images/diagrams/architecture.png)
+![App screenshot](/images/screenshots/dashboard.png)
 ```

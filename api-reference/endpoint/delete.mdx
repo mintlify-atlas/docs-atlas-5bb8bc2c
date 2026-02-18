@@ -2,3 +2,210 @@
 title: 'Delete Plant'
 openapi: 'DELETE /plants/{id}'
 ---
+
+Delete a single plant from the store based on the ID supplied. This operation permanently removes the plant from the inventory.
+
+## Endpoint
+
+```
+DELETE /plants/{id}
+```
+
+## Authentication
+
+This endpoint requires Bearer token authentication. Include your token in the Authorization header:
+
+```bash
+curl -X DELETE "http://sandbox.mintlify.com/plants/42" \
+  -H "Authorization: Bearer YOUR_API_TOKEN"
+```
+
+## Path Parameters
+
+<ParamField path="id" type="integer" format="int64" required>
+  The unique identification number of the plant to delete.
+  
+  <Expandable title="Requirements">
+    - Required parameter
+    - Must be a valid integer (int64 format)
+    - Must correspond to an existing plant ID
+    - Cannot be null or empty
+  </Expandable>
+</ParamField>
+
+<Warning>
+  This operation is permanent and cannot be undone. Ensure you have the correct plant ID before deletion.
+</Warning>
+
+## Response
+
+This endpoint returns no content on successful deletion.
+
+<ResponseField name="204" type="No Content">
+  Plant deleted successfully. No response body is returned.
+</ResponseField>
+
+## Status Codes
+
+<ResponseField name="204" type="Success">
+  Plant deleted successfully with no content returned
+</ResponseField>
+
+<ResponseField name="400" type="Error">
+  Unexpected error occurred during deletion
+  
+  <Expandable title="Error Response">
+    ```json
+    {
+      "error": 400,
+      "message": "Error description"
+    }
+    ```
+    
+    Common error scenarios:
+    - Invalid plant ID format
+    - Plant ID does not exist
+    - User lacks permission to delete this plant
+  </Expandable>
+</ResponseField>
+
+<ResponseField name="404" type="Not Found">
+  Plant with the specified ID was not found
+  
+  ```json
+  {
+    "error": 404,
+    "message": "Plant not found"
+  }
+  ```
+</ResponseField>
+
+## Example Request
+
+<CodeGroup>
+
+```bash cURL
+curl -X DELETE "http://sandbox.mintlify.com/plants/42" \
+  -H "Authorization: Bearer YOUR_API_TOKEN" \
+  -H "Content-Type: application/json"
+```
+
+```javascript JavaScript
+const response = await fetch('http://sandbox.mintlify.com/plants/42', {
+  method: 'DELETE',
+  headers: {
+    'Authorization': 'Bearer YOUR_API_TOKEN',
+    'Content-Type': 'application/json'
+  }
+});
+
+if (response.status === 204) {
+  console.log('Plant deleted successfully');
+} else {
+  const error = await response.json();
+  console.error('Deletion failed:', error);
+}
+```
+
+```python Python
+import requests
+
+url = "http://sandbox.mintlify.com/plants/42"
+headers = {
+    "Authorization": "Bearer YOUR_API_TOKEN",
+    "Content-Type": "application/json"
+}
+
+response = requests.delete(url, headers=headers)
+
+if response.status_code == 204:
+    print("Plant deleted successfully")
+else:
+    error = response.json()
+    print(f"Deletion failed: {error}")
+```
+
+```ruby Ruby
+require 'net/http'
+require 'json'
+
+uri = URI('http://sandbox.mintlify.com/plants/42')
+request = Net::HTTP::Delete.new(uri)
+request['Authorization'] = 'Bearer YOUR_API_TOKEN'
+request['Content-Type'] = 'application/json'
+
+response = Net::HTTP.start(uri.hostname, uri.port) do |http|
+  http.request(request)
+end
+
+if response.code == '204'
+  puts 'Plant deleted successfully'
+else
+  error = JSON.parse(response.body)
+  puts "Deletion failed: #{error}"
+end
+```
+
+</CodeGroup>
+
+## Example Response
+
+```text 204 Success
+(No content returned)
+```
+
+```json 400 Error
+{
+  "error": 400,
+  "message": "Invalid plant ID format. ID must be a valid integer."
+}
+```
+
+```json 404 Not Found
+{
+  "error": 404,
+  "message": "Plant with ID 42 not found in the system."
+}
+```
+
+<Note>
+  A successful deletion returns HTTP status code 204 (No Content) with an empty response body. Always check the status code rather than expecting response data.
+</Note>
+
+<Tip>
+  Before deleting a plant, consider using the [Get Plants endpoint](/api-reference/endpoint/get) to verify the plant exists and retrieve its details for confirmation.
+</Tip>
+
+## Best Practices
+
+### Confirmation Flow
+
+Implement a two-step confirmation process in your application:
+
+1. Fetch the plant details using the GET endpoint
+2. Display the details to the user for confirmation
+3. Execute the DELETE request only after user confirmation
+
+### Error Handling
+
+Always handle both success and error cases:
+
+```javascript
+try {
+  const response = await deletePlant(plantId);
+  if (response.status === 204) {
+    // Update UI to reflect deletion
+    showSuccess('Plant removed from inventory');
+  }
+} catch (error) {
+  if (error.status === 404) {
+    showError('Plant not found');
+  } else {
+    showError('Failed to delete plant');
+  }
+}
+```
+
+### Audit Trail
+
+For production systems, consider implementing an audit log to track deletions for compliance and debugging purposes.

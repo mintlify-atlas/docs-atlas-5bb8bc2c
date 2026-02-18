@@ -2,3 +2,192 @@
 title: 'Create Plant'
 openapi: 'POST /plants'
 ---
+
+Create a new plant in the store. This endpoint adds a plant to the inventory with the specified name and optional tag.
+
+## Endpoint
+
+```
+POST /plants
+```
+
+## Authentication
+
+This endpoint requires Bearer token authentication. Include your token in the Authorization header:
+
+```bash
+curl -X POST "http://sandbox.mintlify.com/plants" \
+  -H "Authorization: Bearer YOUR_API_TOKEN" \
+  -H "Content-Type: application/json"
+```
+
+## Request Body
+
+The request body must be in JSON format and include the plant details.
+
+<ParamField body="name" type="string" required>
+  The name of the plant to add to the store.
+  
+  <Expandable title="Requirements">
+    - Required field
+    - Must be a non-empty string
+    - Should be descriptive and unique
+  </Expandable>
+</ParamField>
+
+<ParamField body="tag" type="string">
+  Tag to specify the type or category of the plant.
+  
+  <Expandable title="Examples">
+    - "succulent" - For cacti and drought-resistant plants
+    - "tropical" - For humidity-loving plants
+    - "flowering" - For plants that produce flowers
+    - "vine" - For climbing or trailing plants
+    - "herb" - For culinary or medicinal herbs
+  </Expandable>
+</ParamField>
+
+<Warning>
+  The `name` field is required. Requests without a name will return a 400 error.
+</Warning>
+
+## Response
+
+<ResponseField name="plant" type="object">
+  The newly created plant object with system-generated ID.
+  
+  <Expandable title="Plant Object">
+    <ResponseField name="id" type="integer" format="int64" required>
+      System-generated identification number for the plant
+    </ResponseField>
+    
+    <ResponseField name="name" type="string" required>
+      The name of the plant as provided in the request
+    </ResponseField>
+    
+    <ResponseField name="tag" type="string">
+      The tag/category of the plant if provided
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+## Status Codes
+
+<ResponseField name="200" type="Success">
+  Plant created successfully and returned in response
+</ResponseField>
+
+<ResponseField name="400" type="Error">
+  Unexpected error or validation failure
+  
+  <Expandable title="Error Response">
+    ```json
+    {
+      "error": 400,
+      "message": "Error description"
+    }
+    ```
+  </Expandable>
+</ResponseField>
+
+## Example Request
+
+<CodeGroup>
+
+```bash cURL
+curl -X POST "http://sandbox.mintlify.com/plants" \
+  -H "Authorization: Bearer YOUR_API_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "Fiddle Leaf Fig",
+    "tag": "tropical"
+  }'
+```
+
+```javascript JavaScript
+const response = await fetch('http://sandbox.mintlify.com/plants', {
+  method: 'POST',
+  headers: {
+    'Authorization': 'Bearer YOUR_API_TOKEN',
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    name: 'Fiddle Leaf Fig',
+    tag: 'tropical'
+  })
+});
+
+const plant = await response.json();
+console.log(plant);
+```
+
+```python Python
+import requests
+import json
+
+url = "http://sandbox.mintlify.com/plants"
+headers = {
+    "Authorization": "Bearer YOUR_API_TOKEN",
+    "Content-Type": "application/json"
+}
+data = {
+    "name": "Fiddle Leaf Fig",
+    "tag": "tropical"
+}
+
+response = requests.post(url, headers=headers, data=json.dumps(data))
+plant = response.json()
+print(plant)
+```
+
+```ruby Ruby
+require 'net/http'
+require 'json'
+
+uri = URI('http://sandbox.mintlify.com/plants')
+request = Net::HTTP::Post.new(uri)
+request['Authorization'] = 'Bearer YOUR_API_TOKEN'
+request['Content-Type'] = 'application/json'
+request.body = {
+  name: 'Fiddle Leaf Fig',
+  tag: 'tropical'
+}.to_json
+
+response = Net::HTTP.start(uri.hostname, uri.port) do |http|
+  http.request(request)
+end
+
+plant = JSON.parse(response.body)
+puts plant
+```
+
+</CodeGroup>
+
+## Example Response
+
+```json 200 Success
+{
+  "id": 42,
+  "name": "Fiddle Leaf Fig",
+  "tag": "tropical"
+}
+```
+
+```json 400 Error
+{
+  "error": 400,
+  "message": "Plant name is required and cannot be empty"
+}
+```
+
+<Note>
+  The API automatically generates a unique ID for each new plant. This ID is used for subsequent operations like deletion.
+</Note>
+
+<Tip>
+  Use consistent tag values across your plants to make categorization and filtering easier. Consider maintaining a standard set of tags for your plant inventory.
+</Tip>
+
+## Webhook Notification
+
+When a plant is successfully created, a webhook notification is sent to your configured endpoint. See the [Webhook documentation](/api-reference/endpoint/webhook) for details on handling these notifications.

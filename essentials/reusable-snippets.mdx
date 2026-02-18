@@ -1,38 +1,28 @@
 ---
-title: "Reusable snippets"
-description: "Reusable, custom snippets to keep content in sync"
-icon: "recycle"
+title: 'Reusable snippets'
+description: 'Create reusable content snippets to keep documentation in sync'
 ---
 
-import SnippetIntro from '/snippets/snippet-intro.mdx';
+Reusable snippets help you maintain consistency across your documentation by defining content once and using it in multiple places. When you update a snippet, all pages that use it are automatically updated.
 
-<SnippetIntro />
+<Note>
+Any page in the `snippets` directory will be treated as a snippet and will not be rendered into a standalone page. If you want to create a standalone page from the snippet, import the snippet into another file and call it as a component.
+</Note>
 
 ## Creating a custom snippet
 
 **Pre-condition**: You must create your snippet file in the `snippets` directory.
 
-<Note>
-  Any page in the `snippets` directory will be treated as a snippet and will not
-  be rendered into a standalone page. If you want to create a standalone page
-  from the snippet, import the snippet into another file and call it as a
-  component.
-</Note>
-
 ### Default export
 
-1. Add content to your snippet file that you want to re-use across multiple
-   locations. Optionally, you can add variables that can be filled in via props
-   when you import the snippet.
+1. Add content to your snippet file that you want to re-use across multiple locations. Optionally, you can add variables that can be filled in via props when you import the snippet.
 
 ```mdx snippets/my-snippet.mdx
-Hello world! This is my content I want to reuse across pages. My keyword of the
-day is {word}.
+Hello world! This is my content I want to reuse across pages. My keyword of the day is {word}.
 ```
 
 <Warning>
-  The content that you want to reuse must be inside the `snippets` directory in
-  order for the import to work.
+The content that you want to reuse must be inside the `snippets` directory in order for the import to work.
 </Warning>
 
 2. Import the snippet into your destination file.
@@ -43,26 +33,102 @@ title: My title
 description: My Description
 ---
 
-import MySnippet from '/snippets/path/to/my-snippet.mdx';
+import MySnippet from '/snippets/my-snippet.mdx';
 
 ## Header
 
-Lorem impsum dolor sit amet.
+Lorem ipsum dolor sit amet.
 
 <MySnippet word="bananas" />
 ```
 
-### Reusable variables
+The snippet will render as:
+
+> Hello world! This is my content I want to reuse across pages. My keyword of the day is bananas.
+
+## Use cases for snippets
+
+<Accordion title="Prerequisites and requirements">
+Define common prerequisites once and reuse them across multiple guides:
+
+```mdx snippets/prerequisites.mdx
+Before you begin, make sure you have:
+
+- Node.js 18 or higher installed
+- An API key from your dashboard
+- Git configured on your machine
+```
+
+Then import it wherever needed:
+
+```mdx
+import Prerequisites from '/snippets/prerequisites.mdx';
+
+<Prerequisites />
+```
+</Accordion>
+
+<Accordion title="API credentials setup">
+Reuse authentication instructions across all API endpoints:
+
+```mdx snippets/auth-header.mdx
+All API requests require an `Authorization` header:
+
+```bash
+Authorization: Bearer YOUR_API_KEY
+```
+
+Get your API key from the [Dashboard](https://app.example.com/settings).
+```
+</Accordion>
+
+<Accordion title="Warning messages">
+Maintain consistent warnings across your docs:
+
+```mdx snippets/rate-limit-warning.mdx
+<Warning>
+This endpoint is rate limited to 100 requests per minute. Exceeding this limit will result in a 429 error.
+</Warning>
+```
+</Accordion>
+
+<Accordion title="Code examples">
+Reuse common code patterns:
+
+```mdx snippets/error-handling.mdx
+```typescript
+try {
+  const result = await apiCall();
+  return result;
+} catch (error) {
+  if (error.response?.status === 429) {
+    // Handle rate limit
+    await sleep(1000);
+    return retry();
+  }
+  throw error;
+}
+```
+```
+</Accordion>
+
+## Reusable variables
+
+Export variables from snippets to reuse data across pages:
 
 1. Export a variable from your snippet file:
 
-```mdx snippets/path/to/custom-variables.mdx
+```mdx snippets/custom-variables.mdx
 export const myName = 'my name';
 
 export const myObject = { fruit: 'strawberries' };
+
+export const API_VERSION = 'v2';
+
+export const BASE_URL = 'https://api.example.com';
 ```
 
-2. Import the snippet from your destination file and use the variable:
+2. Import the variables from your destination file:
 
 ```mdx destination-file.mdx
 ---
@@ -70,15 +136,27 @@ title: My title
 description: My Description
 ---
 
-import { myName, myObject } from '/snippets/path/to/custom-variables.mdx';
+import { myName, myObject, API_VERSION, BASE_URL } from '/snippets/custom-variables.mdx';
 
 Hello, my name is {myName} and I like {myObject.fruit}.
+
+The current API version is {API_VERSION} at {BASE_URL}.
 ```
 
-### Reusable components
+<Tip>
+Use variables for:
+- API versions and endpoints
+- Product names and branding
+- Version numbers
+- Common URLs
+- Configuration values
+</Tip>
 
-1. Inside your snippet file, create a component that takes in props by exporting
-   your component in the form of an arrow function.
+## Reusable components
+
+Create custom components that accept props for maximum flexibility:
+
+1. Inside your snippet file, create a component by exporting an arrow function:
 
 ```mdx snippets/custom-component.mdx
 export const MyComponent = ({ title }) => (
@@ -87,24 +165,189 @@ export const MyComponent = ({ title }) => (
     <p>... snippet content ...</p>
   </div>
 );
+
+export const ApiEndpoint = ({ method, endpoint, description }) => (
+  <div style={{
+    border: '1px solid #e5e7eb',
+    borderRadius: '0.5rem',
+    padding: '1rem',
+    marginBottom: '1rem'
+  }}>
+    <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+      <code style={{
+        backgroundColor: method === 'GET' ? '#10b981' : '#3b82f6',
+        color: 'white',
+        padding: '0.25rem 0.5rem',
+        borderRadius: '0.25rem',
+        fontWeight: 'bold'
+      }}>
+        {method}
+      </code>
+      <code>{endpoint}</code>
+    </div>
+    <p style={{ marginTop: '0.5rem', marginBottom: 0 }}>{description}</p>
+  </div>
+);
 ```
 
 <Warning>
-  MDX does not compile inside the body of an arrow function. Stick to HTML
-  syntax when you can or use a default export if you need to use MDX.
+MDX does not compile inside the body of an arrow function. Stick to HTML syntax when you can or use a default export if you need to use MDX.
 </Warning>
 
-2. Import the snippet into your destination file and pass in the props
+2. Import the snippet into your destination file and pass in the props:
 
 ```mdx destination-file.mdx
 ---
-title: My title
-description: My Description
+title: API Reference
+description: Complete API documentation
 ---
 
-import { MyComponent } from '/snippets/custom-component.mdx';
+import { ApiEndpoint } from '/snippets/custom-component.mdx';
 
-Lorem ipsum dolor sit amet.
+<ApiEndpoint
+  method="GET"
+  endpoint="/api/users"
+  description="Retrieve a list of all users"
+/>
 
-<MyComponent title={'Custom title'} />
+<ApiEndpoint
+  method="POST"
+  endpoint="/api/users"
+  description="Create a new user"
+/>
 ```
+
+## Advanced patterns
+
+<Tabs>
+  <Tab title="Nested snippets">
+    You can import snippets within other snippets:
+
+    ```mdx snippets/parent.mdx
+    import Child from '/snippets/child.mdx';
+
+    This is the parent snippet.
+
+    <Child />
+    ```
+  </Tab>
+  <Tab title="Conditional content">
+    Use props to conditionally render content:
+
+    ```mdx snippets/conditional.mdx
+    export const Feature = ({ plan }) => (
+      <div>
+        {plan === 'enterprise' && (
+          <Note>This feature is only available on Enterprise plans.</Note>
+        )}
+        {plan === 'pro' && (
+          <Tip>Upgrade to Enterprise for advanced features.</Tip>
+        )}
+      </div>
+    );
+    ```
+  </Tab>
+  <Tab title="Dynamic tables">
+    Generate tables from data:
+
+    ```mdx snippets/pricing-table.mdx
+    export const plans = [
+      { name: 'Free', price: '$0', users: '1' },
+      { name: 'Pro', price: '$29', users: '5' },
+      { name: 'Enterprise', price: 'Custom', users: 'Unlimited' }
+    ];
+
+    export const PricingTable = () => (
+      <table>
+        <thead>
+          <tr>
+            <th>Plan</th>
+            <th>Price</th>
+            <th>Users</th>
+          </tr>
+        </thead>
+        <tbody>
+          {plans.map(plan => (
+            <tr key={plan.name}>
+              <td>{plan.name}</td>
+              <td>{plan.price}</td>
+              <td>{plan.users}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    );
+    ```
+  </Tab>
+</Tabs>
+
+## Best practices
+
+<CardGroup cols={2}>
+  <Card title="Keep snippets focused" icon="bullseye">
+    Each snippet should have a single, clear purpose. Don't create mega-snippets that try to do everything.
+  </Card>
+  <Card title="Use descriptive names" icon="tag">
+    Name your snippet files clearly: `api-auth-header.mdx` is better than `snippet1.mdx`.
+  </Card>
+  <Card title="Document snippet props" icon="book">
+    Add comments explaining what props your component snippets accept and their expected types.
+  </Card>
+  <Card title="Version control" icon="code-branch">
+    Be careful when editing snippets - changes affect all pages that use them. Test thoroughly before committing.
+  </Card>
+</CardGroup>
+
+## Common mistakes
+
+<Accordion title="Forgetting the snippets directory">
+**Problem**: Snippet imports fail with module not found errors.
+
+**Solution**: All snippet files must be in the `snippets` directory at the root of your docs:
+
+```bash
+docs/
+├── snippets/
+│   └── my-snippet.mdx  # ✓ Correct
+├── essentials/
+│   └── my-snippet.mdx  # ✗ Wrong
+```
+</Accordion>
+
+<Accordion title="Using relative imports">
+**Problem**: `import Snippet from './snippets/my-snippet.mdx'` doesn't work.
+
+**Solution**: Always use root-relative paths starting with `/snippets/`:
+
+```mdx
+# ✓ Correct
+import Snippet from '/snippets/my-snippet.mdx';
+
+# ✗ Wrong
+import Snippet from './snippets/my-snippet.mdx';
+import Snippet from '../snippets/my-snippet.mdx';
+```
+</Accordion>
+
+<Accordion title="Using MDX in arrow functions">
+**Problem**: MDX components don't render inside arrow function components.
+
+**Solution**: Use HTML syntax or switch to default exports:
+
+```mdx
+# ✗ Won't work
+export const Bad = () => (
+  <Tip>This won't render</Tip>
+);
+
+# ✓ Use HTML instead
+export const Good = () => (
+  <div className="tip">This works</div>
+);
+
+# ✓ Or use default export for MDX
+This is a snippet with MDX components.
+
+<Tip>This works perfectly</Tip>
+```
+</Accordion>

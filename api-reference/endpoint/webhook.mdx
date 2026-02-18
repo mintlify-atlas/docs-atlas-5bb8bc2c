@@ -2,3 +2,289 @@
 title: 'New Plant'
 openapi: 'WEBHOOK /plant/webhook'
 ---
+
+Receive real-time notifications when a new plant is added to the store. This webhook sends POST requests to your configured endpoint with the new plant details.
+
+## Webhook Overview
+
+Webhooks allow your application to receive automatic notifications when events occur in the Plant Store system. Instead of polling the API for changes, the system pushes data to your application in real-time.
+
+## Endpoint Configuration
+
+```
+POST /plant/webhook
+```
+
+You need to provide a publicly accessible HTTPS endpoint that can receive POST requests from our system.
+
+<Warning>
+  Your webhook endpoint must be accessible via HTTPS and return a 200 status code within 5 seconds to acknowledge receipt.
+</Warning>
+
+## Webhook Payload
+
+When a new plant is created, our system sends a POST request to your configured endpoint with the following payload:
+
+<ParamField body="name" type="string" required>
+  The name of the newly created plant.
+  
+  <Expandable title="Details">
+    - Always included in webhook payload
+    - Matches the name provided during plant creation
+    - UTF-8 encoded string
+  </Expandable>
+</ParamField>
+
+<ParamField body="tag" type="string">
+  Tag specifying the type or category of the plant.
+  
+  <Expandable title="Common Values">
+    - "succulent" - Drought-resistant plants
+    - "tropical" - Humidity-loving plants  
+    - "flowering" - Plants that produce flowers
+    - "vine" - Climbing or trailing plants
+    - "herb" - Culinary or medicinal herbs
+    - May be omitted if no tag was specified
+  </Expandable>
+</ParamField>
+
+<ParamField body="id" type="integer" format="int64">
+  System-generated unique identification number for the plant.
+  
+  <Expandable title="Usage">
+    - Unique identifier for the plant
+    - Use this ID for subsequent API operations (GET, DELETE)
+    - Integer in int64 format
+  </Expandable>
+</ParamField>
+
+## Response Requirements
+
+<ResponseField name="200" type="Success">
+  Your endpoint must return a 200 status code to indicate successful receipt of the webhook data.
+  
+  <Expandable title="Important Notes">
+    - Response must be received within 5 seconds
+    - Response body content is ignored
+    - Only the status code matters for acknowledgment
+    - Failure to return 200 may result in retry attempts
+  </Expandable>
+</ResponseField>
+
+<Note>
+  If your endpoint fails to respond with a 200 status code, the system will retry the webhook delivery up to 3 times with exponential backoff.
+</Note>
+
+## Example Webhook Payload
+
+```json Incoming Webhook
+{
+  "id": 42,
+  "name": "Fiddle Leaf Fig",
+  "tag": "tropical"
+}
+```
+
+## Implementation Examples
+
+<CodeGroup>
+
+```javascript Node.js/Express
+const express = require('express');
+const app = express();
+
+app.use(express.json());
+
+app.post('/plant/webhook', (req, res) => {
+  const { id, name, tag } = req.body;
+  
+  console.log('New plant added:', { id, name, tag });
+  
+  // Process the webhook data
+  // - Update your database
+  // - Send notifications
+  // - Trigger other workflows
+  
+  // Return 200 to acknowledge receipt
+  res.status(200).send('Webhook received');
+});
+
+app.listen(3000, () => {
+  console.log('Webhook endpoint listening on port 3000');
+});
+```
+
+```python Flask
+from flask import Flask, request, jsonify
+
+app = Flask(__name__)
+
+@app.route('/plant/webhook', methods=['POST'])
+def plant_webhook():
+    data = request.get_json()
+    
+    plant_id = data.get('id')
+    name = data.get('name')
+    tag = data.get('tag')
+    
+    print(f'New plant added: {name} (ID: {plant_id}, Tag: {tag})')
+    
+    # Process the webhook data
+    # - Update your database
+    # - Send notifications  
+    # - Trigger other workflows
+    
+    # Return 200 to acknowledge receipt
+    return jsonify({'status': 'received'}), 200
+
+if __name__ == '__main__':
+    app.run(port=3000)
+```
+
+```ruby Ruby/Sinatra
+require 'sinatra'
+require 'json'
+
+post '/plant/webhook' do
+  request.body.rewind
+  payload = JSON.parse(request.body.read)
+  
+  id = payload['id']
+  name = payload['name']
+  tag = payload['tag']
+  
+  puts "New plant added: #{name} (ID: #{id}, Tag: #{tag})"
+  
+  # Process the webhook data
+  # - Update your database
+  # - Send notifications
+  # - Trigger other workflows
+  
+  # Return 200 to acknowledge receipt
+  status 200
+  body 'Webhook received'
+end
+```
+
+```php PHP
+<?php
+header('Content-Type: application/json');
+
+// Read the incoming JSON payload
+$payload = json_decode(file_get_contents('php://input'), true);
+
+$id = $payload['id'] ?? null;
+$name = $payload['name'] ?? null;
+$tag = $payload['tag'] ?? null;
+
+error_log("New plant added: $name (ID: $id, Tag: $tag)");
+
+// Process the webhook data
+// - Update your database
+// - Send notifications
+// - Trigger other workflows
+
+// Return 200 to acknowledge receipt
+http_response_code(200);
+echo json_encode(['status' => 'received']);
+?>
+```
+
+</CodeGroup>
+
+## Security Best Practices
+
+### Verify Webhook Source
+
+Implement verification to ensure webhooks are coming from the Plant Store API:
+
+1. **IP Allowlisting**: Restrict webhook endpoint access to known API server IPs
+2. **Signature Verification**: Validate webhook signatures (if implemented)
+3. **HTTPS Only**: Only accept webhooks over secure HTTPS connections
+
+### Handle Duplicates
+
+Webhooks may be delivered more than once. Implement idempotency:
+
+```javascript
+const processedWebhooks = new Set();
+
+app.post('/plant/webhook', (req, res) => {
+  const { id } = req.body;
+  
+  // Check if already processed
+  if (processedWebhooks.has(id)) {
+    console.log('Duplicate webhook, skipping');
+    return res.status(200).send('Already processed');
+  }
+  
+  // Process webhook
+  processedWebhooks.add(id);
+  // ... handle webhook data
+  
+  res.status(200).send('Webhook received');
+});
+```
+
+### Error Handling
+
+Implement robust error handling:
+
+```python
+@app.route('/plant/webhook', methods=['POST'])
+def plant_webhook():
+    try:
+        data = request.get_json()
+        
+        # Validate required fields
+        if not data.get('name'):
+            return jsonify({'error': 'Missing required field: name'}), 400
+        
+        # Process webhook
+        process_new_plant(data)
+        
+        return jsonify({'status': 'received'}), 200
+        
+    except Exception as e:
+        # Log error but still return 200 to prevent retries
+        logger.error(f'Webhook processing error: {str(e)}')
+        return jsonify({'status': 'received'}), 200
+```
+
+<Tip>
+  Process webhooks asynchronously using a queue system (like RabbitMQ or Redis) to ensure your endpoint responds quickly and doesn't timeout.
+</Tip>
+
+## Testing Webhooks
+
+Use these tools to test your webhook endpoint during development:
+
+- **ngrok**: Expose your local server to the internet for testing
+- **webhook.site**: Inspect incoming webhook payloads
+- **Postman**: Manually send test webhook requests
+
+### Test Payload
+
+Use this sample payload to test your endpoint:
+
+```bash
+curl -X POST "https://your-domain.com/plant/webhook" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "id": 123,
+    "name": "Test Plant",
+    "tag": "test"
+  }'
+```
+
+## Webhook Configuration
+
+Contact our support team or use the admin panel to configure your webhook endpoint URL. You can specify:
+
+- **Endpoint URL**: Your HTTPS webhook receiver URL
+- **Events**: Select which events trigger webhooks (new plant, updated plant, etc.)
+- **Secret Key**: Optional signing key for webhook verification
+
+<Note>
+  Webhook functionality must be enabled for your account. Contact support if you don't have access to webhook configuration.
+</Note>

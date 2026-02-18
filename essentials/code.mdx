@@ -1,16 +1,23 @@
 ---
 title: 'Code blocks'
-description: 'Display inline code and code blocks'
-icon: 'code'
+description: 'Display inline code and code blocks with syntax highlighting'
 ---
+
+Mintlify provides powerful syntax highlighting for code blocks and supports inline code snippets.
 
 ## Inline code
 
 To denote a `word` or `phrase` as code, enclose it in backticks (`).
 
-```
+```md
 To denote a `word` or `phrase` as code, enclose it in backticks (`).
 ```
+
+Use inline code for:
+- Function names like `useState()` or `fetchData()`
+- Variable names like `userName` or `API_KEY`
+- File names like `config.json` or `app.tsx`
+- Short commands like `npm install` or `git push`
 
 ## Code blocks
 
@@ -33,3 +40,222 @@ class HelloWorld {
 }
 ```
 ````
+
+## Supported languages
+
+Mintlify supports syntax highlighting for all major programming languages:
+
+<Accordion title="JavaScript/TypeScript">
+```javascript
+const greeting = (name) => {
+  return `Hello, ${name}!`;
+};
+
+console.log(greeting('World'));
+```
+</Accordion>
+
+<Accordion title="Python">
+```python
+def fibonacci(n):
+    if n <= 1:
+        return n
+    return fibonacci(n-1) + fibonacci(n-2)
+
+print(fibonacci(10))
+```
+</Accordion>
+
+<Accordion title="Go">
+```go
+package main
+
+import "fmt"
+
+func main() {
+    fmt.Println("Hello, World!")
+}
+```
+</Accordion>
+
+<Accordion title="Rust">
+```rust
+fn main() {
+    let numbers = vec![1, 2, 3, 4, 5];
+    let sum: i32 = numbers.iter().sum();
+    println!("Sum: {}", sum);
+}
+```
+</Accordion>
+
+## CodeGroup
+
+Use CodeGroup to display multiple code examples in tabs. This is perfect for showing the same operation in different languages or frameworks:
+
+<CodeGroup>
+
+```javascript Node.js
+const response = await fetch('https://api.example.com/data', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+    'Authorization': `Bearer ${token}`
+  },
+  body: JSON.stringify({ key: 'value' })
+});
+
+const data = await response.json();
+```
+
+```python Python
+import requests
+
+headers = {
+    'Content-Type': 'application/json',
+    'Authorization': f'Bearer {token}'
+}
+
+response = requests.post(
+    'https://api.example.com/data',
+    headers=headers,
+    json={'key': 'value'}
+)
+
+data = response.json()
+```
+
+```bash cURL
+curl -X POST https://api.example.com/data \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer $TOKEN" \
+  -d '{"key": "value"}'
+```
+
+</CodeGroup>
+
+Here's how to create a CodeGroup:
+
+````md
+<CodeGroup>
+
+```javascript Node.js
+// Your Node.js code
+```
+
+```python Python
+# Your Python code
+```
+
+```bash cURL
+# Your cURL command
+```
+
+</CodeGroup>
+````
+
+<Tip>
+CodeGroup automatically detects the language from the code fence and creates a tab for each code block. The text after the language name becomes the tab label.
+</Tip>
+
+## File names and line highlighting
+
+Add a file name after the language to display it above your code block:
+
+```typescript users.service.ts
+export class UsersService {
+  async findUser(id: string) {
+    return await this.db.user.findUnique({
+      where: { id }
+    });
+  }
+}
+```
+
+````md
+```typescript users.service.ts
+export class UsersService {
+  async findUser(id: string) {
+    return await this.db.user.findUnique({
+      where: { id }
+    });
+  }
+}
+```
+````
+
+## Shell commands
+
+For terminal commands and shell scripts, use `bash`, `sh`, or `shell`:
+
+```bash
+# Install dependencies
+npm install
+
+# Run development server
+npm run dev
+
+# Build for production
+npm run build
+```
+
+## Configuration files
+
+Use appropriate syntax highlighting for configuration files:
+
+<Tabs>
+  <Tab title="JSON">
+    ```json package.json
+    {
+      "name": "my-app",
+      "version": "1.0.0",
+      "scripts": {
+        "dev": "next dev",
+        "build": "next build"
+      }
+    }
+    ```
+  </Tab>
+  <Tab title="YAML">
+    ```yaml .github/workflows/deploy.yml
+    name: Deploy
+    on:
+      push:
+        branches: [main]
+    jobs:
+      deploy:
+        runs-on: ubuntu-latest
+        steps:
+          - uses: actions/checkout@v2
+          - run: npm install
+          - run: npm run build
+    ```
+  </Tab>
+  <Tab title="TOML">
+    ```toml Cargo.toml
+    [package]
+    name = "my-app"
+    version = "0.1.0"
+    edition = "2021"
+
+    [dependencies]
+    tokio = { version = "1", features = ["full"] }
+    ```
+  </Tab>
+</Tabs>
+
+## Best practices
+
+<CardGroup cols={2}>
+  <Card title="Keep it concise" icon="scissors">
+    Show only the relevant code. Remove boilerplate and focus on what matters.
+  </Card>
+  <Card title="Add context" icon="comment">
+    Include comments to explain complex logic or important details.
+  </Card>
+  <Card title="Use file names" icon="file">
+    Help users understand where code should live by adding file names.
+  </Card>
+  <Card title="Group related examples" icon="layer-group">
+    Use CodeGroup to show the same concept in multiple languages.
+  </Card>
+</CardGroup>

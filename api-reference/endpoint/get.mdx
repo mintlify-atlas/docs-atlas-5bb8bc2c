@@ -2,3 +2,166 @@
 title: 'Get Plants'
 openapi: 'GET /plants'
 ---
+
+Retrieve all plants from the system that the user has access to. This endpoint returns a paginated list of plants with their details.
+
+## Endpoint
+
+```
+GET /plants
+```
+
+## Authentication
+
+This endpoint requires Bearer token authentication. Include your token in the Authorization header:
+
+```bash
+curl -X GET "http://sandbox.mintlify.com/plants?limit=10" \
+  -H "Authorization: Bearer YOUR_API_TOKEN"
+```
+
+## Query Parameters
+
+<ParamField query="limit" type="integer" format="int32">
+  The maximum number of results to return. Use this parameter to control pagination and limit the response size.
+  
+  <Expandable title="Details">
+    - Accepts integer values
+    - Format: int32
+    - Optional parameter
+    - Useful for implementing pagination in your application
+  </Expandable>
+</ParamField>
+
+## Response
+
+<ResponseField name="plants" type="array">
+  An array of plant objects that match the query criteria.
+  
+  <Expandable title="Plant Object">
+    <ResponseField name="name" type="string" required>
+      The name of the plant
+    </ResponseField>
+    
+    <ResponseField name="tag" type="string">
+      Tag to specify the type of plant (e.g., "succulent", "flowering", "tropical")
+    </ResponseField>
+    
+    <ResponseField name="id" type="integer" format="int64">
+      Identification number of the plant
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+## Status Codes
+
+<ResponseField name="200" type="Success">
+  Plant response returned successfully
+</ResponseField>
+
+<ResponseField name="400" type="Error">
+  Unexpected error occurred
+  
+  <Expandable title="Error Response">
+    ```json
+    {
+      "error": 400,
+      "message": "Error description"
+    }
+    ```
+  </Expandable>
+</ResponseField>
+
+## Example Request
+
+<CodeGroup>
+
+```bash cURL
+curl -X GET "http://sandbox.mintlify.com/plants?limit=10" \
+  -H "Authorization: Bearer YOUR_API_TOKEN" \
+  -H "Content-Type: application/json"
+```
+
+```javascript JavaScript
+const response = await fetch('http://sandbox.mintlify.com/plants?limit=10', {
+  method: 'GET',
+  headers: {
+    'Authorization': 'Bearer YOUR_API_TOKEN',
+    'Content-Type': 'application/json'
+  }
+});
+
+const plants = await response.json();
+console.log(plants);
+```
+
+```python Python
+import requests
+
+url = "http://sandbox.mintlify.com/plants"
+headers = {
+    "Authorization": "Bearer YOUR_API_TOKEN",
+    "Content-Type": "application/json"
+}
+params = {"limit": 10}
+
+response = requests.get(url, headers=headers, params=params)
+plants = response.json()
+print(plants)
+```
+
+```ruby Ruby
+require 'net/http'
+require 'json'
+
+uri = URI('http://sandbox.mintlify.com/plants?limit=10')
+request = Net::HTTP::Get.new(uri)
+request['Authorization'] = 'Bearer YOUR_API_TOKEN'
+request['Content-Type'] = 'application/json'
+
+response = Net::HTTP.start(uri.hostname, uri.port) do |http|
+  http.request(request)
+end
+
+plants = JSON.parse(response.body)
+puts plants
+```
+
+</CodeGroup>
+
+## Example Response
+
+```json 200 Success
+[
+  {
+    "id": 1,
+    "name": "Monstera Deliciosa",
+    "tag": "tropical"
+  },
+  {
+    "id": 2,
+    "name": "Snake Plant",
+    "tag": "succulent"
+  },
+  {
+    "id": 3,
+    "name": "Pothos",
+    "tag": "vine"
+  }
+]
+```
+
+```json 400 Error
+{
+  "error": 400,
+  "message": "Invalid limit parameter. Must be a positive integer."
+}
+```
+
+<Note>
+  The response returns an array of plant objects. If no plants are found or the user has no access, an empty array is returned.
+</Note>
+
+<Tip>
+  Use the `limit` parameter to implement pagination efficiently. For large datasets, make multiple requests with appropriate limits to avoid timeouts.
+</Tip>

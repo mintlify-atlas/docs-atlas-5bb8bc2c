@@ -1,8 +1,9 @@
 ---
 title: 'Markdown syntax'
-description: 'Text, title, and styling in standard markdown'
-icon: 'text-size'
+description: 'Write and format content using standard markdown and MDX'
 ---
+
+Mintlify supports standard markdown syntax along with MDX components. You can use markdown for basic text formatting and enhance your docs with interactive components.
 
 ## Titles
 
@@ -21,9 +22,7 @@ Best used for subsection headers.
 ```
 
 <Tip>
-
 Each **title** and **subtitle** creates an anchor and also shows up on the table of contents on the right.
-
 </Tip>
 
 ## Text formatting
@@ -49,9 +48,11 @@ You need to use HTML to write superscript and subscript text. That is, add `<sup
 
 You can add a link by wrapping text in `[]()`. You would write `[link to google](https://google.com)` to [link to google](https://google.com).
 
-Links to pages in your docs need to be root-relative. Basically, you should include the entire folder path. For example, `[link to text](/writing-content/text)` links to the page "Text" in our components section.
+Links to pages in your docs need to be root-relative. Basically, you should include the entire folder path. For example, `[link to code blocks](/essentials/code)` links to the code blocks page.
 
-Relative links like `[link to text](../text)` will open slower because we cannot optimize them as easily.
+<Warning>
+Relative links like `[link to page](../page)` will open slower because we cannot optimize them as easily. Always use root-relative paths.
+</Warning>
 
 ## Blockquotes
 
@@ -77,7 +78,41 @@ To create a blockquote, add a `>` in front of a paragraph.
 > The Witch bade her clean the pots and kettles and sweep the floor and keep the fire fed with wood.
 ```
 
-### LaTeX
+## Lists
+
+### Unordered lists
+
+Create unordered lists using `-`, `*`, or `+`:
+
+- First item
+- Second item
+- Third item
+  - Nested item
+  - Another nested item
+
+```md
+- First item
+- Second item
+- Third item
+  - Nested item
+  - Another nested item
+```
+
+### Ordered lists
+
+Create ordered lists using numbers:
+
+1. First step
+2. Second step
+3. Third step
+
+```md
+1. First step
+2. Second step
+3. Third step
+```
+
+## LaTeX
 
 Mintlify supports [LaTeX](https://www.latex-project.org) through the Latex component.
 
@@ -85,4 +120,57 @@ Mintlify supports [LaTeX](https://www.latex-project.org) through the Latex compo
 
 ```md
 <Latex>8 x (vk x H1 - H2) = (0,1)</Latex>
+```
+
+## Callout components
+
+Use callout components to highlight important information:
+
+<Note>
+This is a note callout. Use it for helpful information.
+</Note>
+
+<Tip>
+This is a tip callout. Use it for best practices and pro tips.
+</Tip>
+
+<Warning>
+This is a warning callout. Use it for important warnings.
+</Warning>
+
+```md
+<Note>
+This is a note callout. Use it for helpful information.
+</Note>
+
+<Tip>
+This is a tip callout. Use it for best practices and pro tips.
+</Tip>
+
+<Warning>
+This is a warning callout. Use it for important warnings.
+</Warning>
+```
+
+## Accordion
+
+Use accordions to organize content that users can expand and collapse:
+
+<Accordion title="Why use accordions?">
+Accordions help reduce visual clutter by hiding content until users need it. They're perfect for FAQs, optional details, and supplementary information.
+</Accordion>
+
+<Accordion title="Can I nest content inside?">
+Yes! You can include any markdown or MDX content inside an accordion:
+
+- Lists
+- Code blocks
+- Images
+- Other components
+</Accordion>
+
+```md
+<Accordion title="Why use accordions?">
+Accordions help reduce visual clutter by hiding content until users need it.
+</Accordion>
 ```
